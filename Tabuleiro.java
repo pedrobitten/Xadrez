@@ -38,14 +38,14 @@ public class Tabuleiro {
     }
     
     //Posicionar as pecas do jogador1
-    matriz[0][0] = new Torre("T1");
-    matriz[0][7] = new Torre("T1");
-    matriz[0][1] = new Bispo("B1");
-    matriz[0][6] = new Bispo("B1");
-    matriz[0][2] = new Cavalo("C1");
-    matriz[0][5] = new Cavalo("C1");
-    matriz[0][3] = new Rainha("R1");
-    matriz[0][4] = new Rei("r1");
+    matriz[7][0] = new Torre("T1");
+    matriz[7][7] = new Torre("T1");
+    matriz[7][1] = new Bispo("B1");
+    matriz[7][6] = new Bispo("B1");
+    matriz[7][2] = new Cavalo("C1");
+    matriz[7][5] = new Cavalo("C1");
+    matriz[7][3] = new Rainha("R1");
+    matriz[7][4] = new Rei("r1");
     
   }
   
