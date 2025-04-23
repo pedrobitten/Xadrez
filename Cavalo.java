@@ -6,7 +6,7 @@ public class Cavalo extends Pecas {
     cavalo_do_jogador = cavalo_J;
   }
   
-  @Override
+
   public String getPeca(){
     return cavalo_do_jogador;
   }
