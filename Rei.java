@@ -6,7 +6,6 @@ public class Rei extends Pecas {
     rei_do_jogador = rei_J;
   }
   
-  @Override
   public String getPeca(){
     return rei_do_jogador;
   }
