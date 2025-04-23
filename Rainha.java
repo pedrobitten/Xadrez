@@ -6,7 +6,6 @@ public class Rainha extends Pecas {
     rainha_do_jogador = rainha_J;
   }
   
-  @Override
   public String getPeca(){
     return rainha_do_jogador;
   }
