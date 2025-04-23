@@ -6,7 +6,7 @@ public class Peao extends Pecas {
     peao_do_jogador = peao_J;
   }
   
-  @Override
+
   public String getPeca(){
     return peao_do_jogador;
   }
