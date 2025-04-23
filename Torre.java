@@ -6,7 +6,6 @@ public class Torre extends Pecas {
     torre_do_jogador = torre_J;
   }
   
-  @Override
   public String getPeca(){
     return torre_do_jogador;
   }
