@@ -1,6 +1,7 @@
+import java.util.Scanner;
 
 public class Tabuleiro {
-  private Pecas[][] matriz = new Pecas[8][8];
+  public Pecas[][] matriz = new Pecas[8][8];
   private int cont1;
   private int cont2;
   
@@ -19,7 +20,7 @@ public class Tabuleiro {
     //Posicionar peao do jogador2
     for (cont2 = 0; cont2 < 8; cont2++)
     {
-      matriz[1][cont2] = new Peao("P2");
+      matriz[1][cont2] = new Peao("P2", 2);
     }
     
     //Resto do Tabuleiro
@@ -34,7 +35,7 @@ public class Tabuleiro {
     //Posicionar peao do jogador1
     for (cont2 = 0; cont2 < 8; cont2++)
     {
-      matriz[6][cont2] = new Peao("P1");
+      matriz[6][cont2] = new Peao("P1", 1);
     }
     
     //Posicionar as pecas do jogador1
@@ -47,6 +48,40 @@ public class Tabuleiro {
     matriz[7][3] = new Rainha("R1");
     matriz[7][4] = new Rei("r1");
     
+  }
+  
+  public Pecas getPecaNaPosicao(String coordenada) {
+	  if (coordenada.length() != 2) {
+		  return null;
+	  }
+	  
+	  char colunaChar = coordenada.toLowerCase().charAt(0);
+	  char linhaChar = coordenada.charAt(1);
+	  
+	  int coluna = colunaChar - 'a';
+	  int linha = 8 - Character.getNumericValue(linhaChar);
+	  
+	  if (coluna < 0 || coluna > 7 || linha < 0 || linha > 7) {
+		  return null;
+	  }
+	  
+	  
+	  return matriz[linha][coluna];
+  }
+  
+  //2 - andar 2 casas; 1 - andar 1 casa
+  public void movimento(Pecas peca, Tabuleiro tabuleiro, String coordenada)
+  {
+	  if (peca instanceof Peao) {
+		  Scanner input = new Scanner(System.in);
+		  int tipo_de_movimento;
+		  Peao peao = (Peao)peca;
+		  
+		  System.out.println("Digite quantas casas para andar");
+		  tipo_de_movimento = input.nextInt();
+		  peao.movimentoPeao(tabuleiro, peao, tipo_de_movimento, coordenada);
+	  }
+	  
   }
   
   public void printaTabuleiro(){
