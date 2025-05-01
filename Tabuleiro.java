@@ -8,12 +8,12 @@ public class Tabuleiro {
   public Tabuleiro(){
     
     //Posicionar as pecas do jogador2 
-    matriz[0][0] = new Torre("T2");
-    matriz[0][7] = new Torre("T2");
-    matriz[0][1] = new Bispo("B2");
-    matriz[0][6] = new Bispo("B2");
-    matriz[0][2] = new Cavalo("C2");
-    matriz[0][5] = new Cavalo("C2");
+    matriz[0][0] = new Torre("T2", 2);
+    matriz[0][7] = new Torre("T2", 2);
+    matriz[0][1] = new Cavalo("C2", 2);
+    matriz[0][6] = new Cavalo("C2", 2);
+    matriz[0][2] = new Bispo("B2", 2);
+    matriz[0][5] = new Bispo("B2", 2);
     matriz[0][3] = new Rainha("R2");
     matriz[0][4] = new Rei("r2");
     
@@ -38,13 +38,17 @@ public class Tabuleiro {
       matriz[6][cont2] = new Peao("P1", 1);
     }
     
+    //apenas teste
+    
+    //matriz[1][4] = null;
+    
     //Posicionar as pecas do jogador1
-    matriz[7][0] = new Torre("T1");
-    matriz[7][7] = new Torre("T1");
-    matriz[7][1] = new Bispo("B1");
-    matriz[7][6] = new Bispo("B1");
-    matriz[7][2] = new Cavalo("C1");
-    matriz[7][5] = new Cavalo("C1");
+    matriz[7][0] = new Torre("T1", 1);
+    matriz[7][7] = new Torre("T1", 1);
+    matriz[7][1] = new Cavalo("C1", 1);
+    matriz[7][6] = new Cavalo("C1", 1);
+    matriz[7][2] = new Bispo("B1", 1);
+    matriz[7][5] = new Bispo("B1", 1);
     matriz[7][3] = new Rainha("R1");
     matriz[7][4] = new Rei("r1");
     
@@ -70,8 +74,9 @@ public class Tabuleiro {
   }
   
   //2 - andar 2 casas; 1 - andar 1 casa
-  public void movimento(Pecas peca, Tabuleiro tabuleiro, String coordenada)
+  public void movimento(Pecas peca, Tabuleiro tabuleiro, String coordenada, String coordenada_destino)
   {
+	  
 	  if (peca instanceof Peao) {
 		  Scanner input = new Scanner(System.in);
 		  int tipo_de_movimento;
@@ -81,6 +86,19 @@ public class Tabuleiro {
 		  tipo_de_movimento = input.nextInt();
 		  peao.movimentoPeao(tabuleiro, peao, tipo_de_movimento, coordenada);
 	  }
+	  
+	  else if (peca instanceof Torre) {
+		  Torre torre = (Torre)peca;
+		  
+		  torre.movimentoTorre(tabuleiro, torre, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Bispo) {
+		  Bispo bispo = (Bispo)peca;
+		  
+		  bispo.movimentoBispo(tabuleiro, bispo, coordenada, coordenada_destino);
+	  }
+			
 	  
   }
   
