@@ -15,7 +15,7 @@ public class Tabuleiro {
     matriz[0][2] = new Bispo("B2", 2);
     matriz[0][5] = new Bispo("B2", 2);
     matriz[0][3] = new Rainha("R2", 2);
-    matriz[0][4] = new Rei("r2");
+    matriz[0][4] = new Rei("r2", 2);
     
     //Posicionar peao do jogador2
     for (cont2 = 0; cont2 < 8; cont2++)
@@ -40,7 +40,7 @@ public class Tabuleiro {
     
     //apenas teste
     
-    matriz[1][3] = null;
+    matriz[1][4] = null;
     
     //Posicionar as pecas do jogador1
     matriz[7][0] = new Torre("T1", 1);
@@ -50,7 +50,7 @@ public class Tabuleiro {
     matriz[7][2] = new Bispo("B1", 1);
     matriz[7][5] = new Bispo("B1", 1);
     matriz[7][3] = new Rainha("R1", 1);
-    matriz[7][4] = new Rei("r1");
+    matriz[7][4] = new Rei("r1", 1);
     
   }
   
@@ -101,8 +101,18 @@ public class Tabuleiro {
 	  
 	  else if (peca instanceof Rainha) {
 		  Rainha rainha = (Rainha)peca;
-		  System.out.println("Eh rainha");
 		  rainha.movimentoRainha(tabuleiro, rainha, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Rei) {
+		  Rei rei = (Rei) peca;
+		  rei.movimentoRei(tabuleiro, rei, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Cavalo) {
+		  Cavalo cavalo = (Cavalo) peca;
+		  cavalo.movimentoCavalo(tabuleiro, cavalo, coordenada, coordenada_destino);
+		  
 	  }
 			
 	  
