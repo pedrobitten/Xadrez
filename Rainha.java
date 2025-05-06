@@ -11,6 +11,11 @@ public class Rainha extends Pecas {
   public String getPeca(){
     return rainha_do_jogador;
   }
+  
+  public int getJogador() {
+	  return jogador;
+  }
+
 
 
   public void movimentoRainha(Tabuleiro tabuleiro, Rainha rainha_jogador, String coordenada_da_peca, String coordenada_do_destino)
