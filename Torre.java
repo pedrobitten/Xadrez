@@ -13,6 +13,11 @@ public class Torre extends Pecas {
     return torre_do_jogador;
   }
   
+  public int getJogador() {
+	  return jogador;
+  }
+
+  
   
   //problema no movimento para esquerda
   public void movimentoTorre(Tabuleiro tabuleiro, Torre torre_jogador,  String coordenada_da_peca, String coordenada_do_destino)
