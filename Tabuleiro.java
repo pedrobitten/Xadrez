@@ -40,7 +40,8 @@ public class Tabuleiro {
     
     //apenas teste
     
-    matriz[1][4] = null;
+    //matriz[4][3] = new Peao("P1", 1);
+    //matriz[3][2] = new Peao("P2", 2);
     
     //Posicionar as pecas do jogador1
     matriz[7][0] = new Torre("T1", 1);
@@ -116,6 +117,49 @@ public class Tabuleiro {
 	  }
 			
 	  
+  }
+  
+  public void ataque(Pecas peca, Tabuleiro tabuleiro, String coordenada, String coordenada_destino)
+  {
+	  if (peca instanceof Peao) {
+		  Scanner input = new Scanner(System.in);
+		  //int tipo_de_movimento;
+		  Peao peao = (Peao)peca;
+		  //System.out.println("Digite quantas casas para andar");
+		  //tipo_de_movimento = input.nextInt();
+		  peao.ataquePeao(tabuleiro, peao, coordenada, coordenada_destino);;
+	  }
+	  
+	  /*
+	  else if (peca instanceof Torre) {
+		  Torre torre = (Torre)peca;
+		  
+		  torre.movimentoTorre(tabuleiro, torre, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Bispo) {
+		  Bispo bispo = (Bispo)peca;
+		  
+		  bispo.movimentoBispo(tabuleiro, bispo, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Rainha) {
+		  Rainha rainha = (Rainha)peca;
+		  rainha.movimentoRainha(tabuleiro, rainha, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Rei) {
+		  Rei rei = (Rei) peca;
+		  rei.movimentoRei(tabuleiro, rei, coordenada, coordenada_destino);
+	  }
+	  
+	  else if (peca instanceof Cavalo) {
+		  Cavalo cavalo = (Cavalo) peca;
+		  cavalo.movimentoCavalo(tabuleiro, cavalo, coordenada, coordenada_destino);
+		  
+	  }
+	  
+	  */
   }
   
   public void printaTabuleiro(){
