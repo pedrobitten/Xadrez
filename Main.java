@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+//Consertar a main
 public class Main {
     public static void main(String[] args) {
       Tabuleiro tabuleiro = new Tabuleiro();
@@ -35,8 +36,7 @@ public class Main {
     		  System.out.println("Escolha em que posicao ir (digite a coordenada):");
     		  System.out.println("Se quiser mostrar o tabuleiro, aperte 1");
 			  coordenada_destino = input.nextLine();
-    		  //Peao peao = (Peao)peca_escolhida;
-    		  //System.out.println(peca_escolhida.getClass());
+
     		  tabuleiro.movimento(peca_escolhida,tabuleiro,coordenada_peca, coordenada_destino);
     		  tabuleiro.printaTabuleiro();
     		  jogadorAtual = 2;
@@ -52,6 +52,35 @@ public class Main {
     		  System.out.println("Digite o comando, jogador" + jogadorAtual);
     	      System.out.println("1 - Movimento; 2 - Ataque; 3 - Mostrar tabuleiro");
     	      comando = input.nextInt();
+    	  }
+    	  
+    	  else if (comando == 2) {
+    		  System.out.println("Escolha a peça (digite a coordenada):");
+    		  System.out.println("Se quiser mostrar o tabuleiro, aperte 1");
+    		  
+    		  coordenada_peca = input.nextLine();
+    		  
+    		  while (coordenada_peca.equals("1")) 
+    		  {
+    			  
+    			  tabuleiro.printaTabuleiro();
+    			  System.out.println("Escolha a peça (digite a coordenada):");
+        		  System.out.println("Se quiser mostrar o tabuleiro, aperte 1");
+    			  coordenada_peca = input.nextLine();
+    		  }
+    		  
+    		  
+    		  
+    		  Pecas peca_escolhida = tabuleiro.getPecaNaPosicao(coordenada_peca);    		  
+    		  
+    		  System.out.println("Escolha a peça a ser atacada(digite a coordenada):");
+    		  //System.out.println("Se quiser mostrar o tabuleiro, aperte 1");
+    		  
+    		  coordenada_destino = input.nextLine();
+    		  
+    		  tabuleiro.ataque(peca_escolhida, tabuleiro, coordenada_peca, coordenada_destino);
+    		  
+    		  tabuleiro.printaTabuleiro();
     	  }
      
       }
