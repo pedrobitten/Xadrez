@@ -12,6 +12,10 @@ public class Bispo extends Pecas {
     return bispo_do_jogador;
   }
   
+  public int getJogador() {
+    return jogador;
+  }
+  
   public void movimentoBispo(Tabuleiro tabuleiro, Bispo bispo_jogador, String coordenada_da_peca, String coordenada_do_destino)
   {
 	  	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
