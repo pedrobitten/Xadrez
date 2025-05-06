@@ -13,6 +13,11 @@ public class Cavalo extends Pecas {
     return cavalo_do_jogador;
   }
   
+  public int getJogador() {
+	  return jogador;
+  }
+
+  
   public void movimentoCavalo(Tabuleiro tabuleiro, Cavalo cavalo_jogador, String coordenada_da_peca, String coordenada_do_destino)
   {
 	  	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
