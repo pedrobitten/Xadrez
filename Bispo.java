@@ -1,7 +1,7 @@
 public class Bispo extends Pecas {
 
   private String bispo_do_jogador;
-  public int jogador;
+  private int jogador;
   
   public Bispo(String bispo_J, int jogador_1_ou_2){
     bispo_do_jogador = bispo_J;
@@ -57,12 +57,63 @@ public class Bispo extends Pecas {
 			coluna += direcao_coluna;
 		}
 		
-		//funcao de ataque?
-		
 		
 		tabuleiro.matriz[linha_peca][coluna_peca] = null;
 		tabuleiro.matriz[linha_destino][coluna_destino] = bispo_jogador;
 	  
+  }
+  
+  public void ataqueBispo(Tabuleiro tabuleiro, Bispo bispo_jogador,  String coordenada_bispo, String coordenada_peca_inimiga)
+  {
+	  char colunaChar_bispo = coordenada_bispo.toLowerCase().charAt(0);
+	  char linhaChar_bispo = coordenada_bispo.charAt(1);
+
+	  int coluna_bispo = colunaChar_bispo - 'a';
+	  int linha_bispo = 8 - Character.getNumericValue(linhaChar_bispo);
+		
+	  char colunaChar_peca_inimiga = coordenada_peca_inimiga.toLowerCase().charAt(0);
+	  char linhaChar_peca_inimiga = coordenada_peca_inimiga.charAt(1);
+
+	  int coluna_peca_inimiga = colunaChar_peca_inimiga - 'a';
+	  int linha_peca_inimiga = 8 - Character.getNumericValue(linhaChar_peca_inimiga);
+	  
+	  int diferenca_linha = linha_peca_inimiga - linha_bispo;
+	  int diferenca_coluna = coluna_peca_inimiga - coluna_bispo;
+		
+	  if (Math.abs(diferenca_linha) != Math.abs(diferenca_coluna)) {
+		  System.out.println("Movimento inválido! O bispo só pode se mover na diagonal");
+		  return ;
+	  }
+	  
+	  int direcao_linha = Integer.signum(diferenca_linha);
+	  int direcao_coluna = Integer.signum(diferenca_coluna);
+		
+	  int linha = linha_bispo + direcao_linha;
+	  int coluna = coluna_bispo + direcao_coluna;
+		
+	  //Verificando se há peças no meio do caminho
+	  while(linha != linha_peca_inimiga && coluna != coluna_peca_inimiga)
+	  {
+		  if (tabuleiro.matriz[linha][coluna] != null) {
+			  System.out.println("Caminho bloqueado! Não é possível mover o bispo.");
+			  return;
+		  }
+			
+		  linha += direcao_linha;
+		  coluna += direcao_coluna;
+	  }
+	  
+
+	  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
+
+	  if (peca_inimiga.getJogador() == bispo_jogador.getJogador()) {
+		System.out.println("Movimento invalido! O bispo nao pode atacar");
+		return ;
+	  }
+	
+	  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = bispo_jogador;
+	  tabuleiro.matriz[linha_bispo][coluna_bispo] = null;
+	
   }
 
 }
