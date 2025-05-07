@@ -40,9 +40,10 @@ public class Tabuleiro {
     
     //apenas teste
     
-    //matriz[6][4] = null;
-    //matriz[4][2] = new Peao("P1", 1);
-    //matriz[3][2] = new Peao("P2", 2);
+   
+    //matriz[1][4] = new Rei("r1", 1);
+    //matriz[1][5] = new Peao("P1", 1);
+
     
     //Posicionar as pecas do jogador1
     matriz[7][0] = new Torre("T1", 1);
@@ -145,17 +146,21 @@ public class Tabuleiro {
 		  bispo.ataqueBispo(tabuleiro, bispo, coordenada, coordenada_destino);
 	  }
 	  
-	  /*
+	  
 	  
 	  else if (peca instanceof Rainha) {
 		  Rainha rainha = (Rainha)peca;
-		  rainha.movimentoRainha(tabuleiro, rainha, coordenada, coordenada_destino);
+		  rainha.ataqueRainha(tabuleiro, rainha, coordenada, coordenada_destino);
 	  }
+	  
+	  
 	  
 	  else if (peca instanceof Rei) {
 		  Rei rei = (Rei) peca;
-		  rei.movimentoRei(tabuleiro, rei, coordenada, coordenada_destino);
+		  rei.ataqueRei(tabuleiro, rei, coordenada, coordenada_destino);
 	  }
+	  
+	  /*
 	  
 	  else if (peca instanceof Cavalo) {
 		  Cavalo cavalo = (Cavalo) peca;
