@@ -35,7 +35,7 @@ public class Rei extends Pecas {
 	int diferenca_coluna = coluna_destino - coluna_peca;
 			
 	if (Math.abs(diferenca_linha) > 1 || Math.abs(diferenca_coluna) > 1) {
-		 System.out.println("Movimento invalido! O rei so pode andar uma casa em qualquer direção.");
+		 System.out.println("Movimento invalido! O rei so pode andar uma casa em qualquer direÃ§Ã£o.");
 	     return;
 	}
 	
@@ -49,5 +49,39 @@ public class Rei extends Pecas {
 	
 	
   }
+  
+  public void ataqueRei(Tabuleiro tabuleiro, Rei rei_jogador, String coordenada_rei, String coordenada_peca_inimiga)
+	{
+		char colunaChar_rei = coordenada_rei.toLowerCase().charAt(0);
+		char linhaChar_rei = coordenada_rei.charAt(1);
+		  
+		int coluna_rei = colunaChar_rei - 'a';
+		int linha_rei = 8 - Character.getNumericValue(linhaChar_rei);
+		  
+		char colunaChar_peca_inimiga = coordenada_peca_inimiga.toLowerCase().charAt(0);
+		char linhaChar_peca_inimiga = coordenada_peca_inimiga.charAt(1);
+		  
+		int coluna_peca_inimiga = colunaChar_peca_inimiga - 'a';
+		int linha_peca_inimiga = 8 - Character.getNumericValue(linhaChar_peca_inimiga);
+		  
+		int diferenca_linha = linha_peca_inimiga - linha_rei;
+		int diferenca_coluna = coluna_peca_inimiga - coluna_rei;
+				
+		if (Math.abs(diferenca_linha) > 1 || Math.abs(diferenca_coluna) > 1) {
+			 System.out.println("Movimento invalido! O rei so pode andar uma casa em qualquer direÃ§Ã£o.");
+		     return;
+		}
+		
+		Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
+		  
+		if (peca_inimiga.getJogador() == rei_jogador.getJogador()) {
+			System.out.println("Movimento invalido! O rei nao pode atacar");
+			return ;
+		}
+		
+		tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = rei_jogador;
+		tabuleiro.matriz[linha_rei][coluna_rei] = null;
+		
+	}
 
 }
