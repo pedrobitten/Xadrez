@@ -1,0 +1,31 @@
+Casos de teste
+
+- Bispo
+
+* movimento: 12 testes
+
+-> Testar movimentos diagonais - 4
+-> Testar movimento incorreto - 4
+-> Testar movimento onde peças estão no caminho - 4 
+
+* ataque: 14 testes
+
+-> Testar movimentos diagonais - 4 
+-> Testar movimento incorreto - 4
+-> Testar movimento onde peças estão no caminho - 4
+-> Testar ataque a peca do próprio jogador - 2
+
+- Cavalo
+
+* movimento: 24 testes
+
+-> Testar movimentos - 8
+-> Testar movimento incorreto - 8
+-> Testar movimento onde o destino está ocupado - 8 
+
+* ataque: 20 testes
+
+-> Testar movimentos diagonais - 8 
+-> Testar movimento incorreto - 2
+-> Testar movimento onde peças estão no caminho - 8
+-> Testar ataque a peca do próprio jogador - 2
