@@ -41,18 +41,18 @@ public class Rainha extends Pecas {
 	if (movimento_diagonal || movimento_reto) {
 		
 		//if (movimento_diagonal == true) {
-			//Direção da movimentação
+			//DireÃ§Ã£o da movimentaÃ§Ã£o
 			int direcao_linha = Integer.signum(diferenca_linha);
 			int direcao_coluna = Integer.signum(diferenca_coluna);
 					
 			int linha = linha_peca + direcao_linha;
 			int coluna = coluna_peca + direcao_coluna;
 					
-					//Verificando se há peças no meio do caminho
+					//Verificando se hÃ¡ peÃ§as no meio do caminho
 			while(linha != linha_destino ||  coluna != coluna_destino)
 			{
 				if (tabuleiro.matriz[linha][coluna] != null) {
-					System.out.println("Caminho bloqueado! Não é possível mover a rainha.");
+					System.out.println("Caminho bloqueado! NÃ£o Ã© possÃ­vel mover a rainha.");
 				    return;
 				}
 						
@@ -68,9 +68,71 @@ public class Rainha extends Pecas {
 	}
   
   	else {
-		System.out.println("Movimento inválido para a Rainha!");
+		System.out.println("Movimento invÃ¡lido para a Rainha!");
+	}
+	
+}
+  
+	public void ataqueRainha(Tabuleiro tabuleiro, Rainha rainha_jogador, String coordenada_rainha, String coordenada_peca_inimiga)
+	{
+		char colunaChar_rainha = coordenada_rainha.toLowerCase().charAt(0);
+		char linhaChar_rainha = coordenada_rainha.charAt(1);
+		  
+		int coluna_rainha = colunaChar_rainha - 'a';
+		int linha_rainha = 8 - Character.getNumericValue(linhaChar_rainha);
+		  
+		char colunaChar_peca_inimiga = coordenada_peca_inimiga.toLowerCase().charAt(0);
+		char linhaChar_peca_inimiga = coordenada_peca_inimiga.charAt(1);
+		  
+		int coluna_peca_inimiga = colunaChar_peca_inimiga - 'a';
+		int linha_peca_inimiga = 8 - Character.getNumericValue(linhaChar_peca_inimiga);
+		  
+		int diferenca_linha = linha_peca_inimiga - linha_rainha;
+		int diferenca_coluna = coluna_peca_inimiga - coluna_rainha;
+				
+	
+		boolean movimento_diagonal = Math.abs(diferenca_linha) == Math.abs(diferenca_coluna);
+		boolean movimento_reto = diferenca_linha == 0 || diferenca_coluna == 0;
+				
+		if (movimento_diagonal || movimento_reto) {
+			
+			//if (movimento_diagonal == true) {
+				//DireÃ§Ã£o da movimentaÃ§Ã£o
+				int direcao_linha = Integer.signum(diferenca_linha);
+				int direcao_coluna = Integer.signum(diferenca_coluna);
+						
+				int linha = linha_rainha + direcao_linha;
+				int coluna = coluna_rainha + direcao_coluna;
+						
+						//Verificando se hÃ¡ peÃ§as no meio do caminho
+				while(linha != linha_peca_inimiga ||  coluna != coluna_peca_inimiga)
+				{
+					if (tabuleiro.matriz[linha][coluna] != null) {
+						System.out.println("Caminho bloqueado! Nao eh possivel mover a rainha.");
+					    return;
+					}
+							
+					linha += direcao_linha;
+					coluna += direcao_coluna;
+				}
+			
+			Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
+				  
+			if (peca_inimiga.getJogador() == rainha_jogador.getJogador()) {
+				System.out.println("Movimento invalido! A rainha nao pode atacar");
+				return ;
+			}
+			
+			
+			tabuleiro.matriz[linha_rainha][coluna_rainha] = null;
+			tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = rainha_jogador;
+
+		}
+	  
+	  	else {
+			System.out.println("Movimento invalido para a Rainha!");
+		}
 	}
 
-}
   
 }
