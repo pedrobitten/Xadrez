@@ -76,7 +76,7 @@ public class Tabuleiro {
 	  return matriz[linha][coluna];
   }
   
-  //2 - andar 2 casas; 1 - andar 1 casa
+
   public void movimento(Pecas peca, Tabuleiro tabuleiro, String coordenada, String coordenada_destino)
   {
 	  
