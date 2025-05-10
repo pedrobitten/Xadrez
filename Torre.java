@@ -18,8 +18,7 @@ public class Torre extends Pecas {
   }
 
   
-  
-  //problema no movimento para esquerda
+
   public void movimentoTorre(Tabuleiro tabuleiro, Torre torre_jogador,  String coordenada_da_peca, String coordenada_do_destino)
   {
 	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
