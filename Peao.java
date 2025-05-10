@@ -19,44 +19,46 @@ public class Peao extends Pecas {
 	  return jogador;
   }
   
-  public void movimentoPeao(Tabuleiro tabuleiro, Peao peao_jogador, int tipo_de_movimento, String coordenada)
+  public void movimentoPeao(Tabuleiro tabuleiro, Peao peao_jogador, String coordenada_peca, String coordenada_destino)
   {
-	  if (tipo_de_movimento == 2 && peao_jogador.posicao != "original") {
-		  System.out.println("Erro");
-	  }
 	  
-	  else {
-		  char colunaChar = coordenada.toLowerCase().charAt(0);
-		  char linhaChar = coordenada.charAt(1);
-		  int direcao;
-		  
-		  if (peao_jogador.jogador == 1) {
-			  direcao = -1;
-		  }
-		  
-		  else {
-			  direcao = 1;
-		  }
-		 
-		  int coluna = colunaChar - 'a';
-		  int linha = 8 - Character.getNumericValue(linhaChar);
-		  
-		  if (tipo_de_movimento == 2) {
-			  tabuleiro.matriz[linha + 2 * direcao][coluna] = peao_jogador;
-			  tabuleiro.matriz[linha][coluna] = null;
-			  peao_jogador.posicao = "diferente";
-		  }
-		  
-		  else if (tipo_de_movimento == 1) {
-			  System.out.println("Foi condicao");
-			  tabuleiro.matriz[linha + direcao][coluna] = peao_jogador;
-			  tabuleiro.matriz[linha][coluna] = null;
-			  peao_jogador.posicao = "diferente";
-		  }
-		  
-		  
-	  }
-	  
+		char colunaChar_peca = coordenada_peca.toLowerCase().charAt(0);
+		char linhaChar_peca = coordenada_peca.charAt(1);
+				  
+		int coluna_peca = colunaChar_peca - 'a';
+		int linha_peca = 8 - Character.getNumericValue(linhaChar_peca);
+				 
+		char colunaChar_destino = coordenada_destino.toLowerCase().charAt(0);
+		char linhaChar_destino = coordenada_destino.charAt(1);
+		
+		int coluna_destino = colunaChar_destino - 'a';
+		int linha_destino = 8 - Character.getNumericValue(linhaChar_destino);
+				  
+		int diferenca_linha = linha_destino - linha_peca;
+				  
+		if (Math.abs(diferenca_linha) == 2 && peao_jogador.posicao != "original") {
+			System.out.println("Movimento invalido!");
+			return;
+		}
+				  
+		int inicio = Math.min(linha_peca, linha_destino);
+		int fim = Math.max(linha_peca, linha_destino);
+			      
+		for (int cont = inicio; cont < fim; cont++)
+		{
+			if (tabuleiro.matriz[cont][coluna_peca] != null) {
+				System.out.println("Ha pecas no caminho!");
+				return;
+			}
+		}
+				 
+		
+		peao_jogador.posicao = "diferente";
+		
+		tabuleiro.matriz[linha_destino][coluna_destino] = peao_jogador;
+	
+		tabuleiro.matriz[linha_peca][coluna_peca] = null;
+				    
   }
   
   public void ataquePeao(Tabuleiro tabuleiro, Peao peao_jogador, String coordenada_peao, String coordenada_peca_inimiga)
