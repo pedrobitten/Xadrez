@@ -1,3 +1,4 @@
+
 public class Rei extends Pecas {
 
   private String rei_do_jogador;
@@ -17,7 +18,7 @@ public class Rei extends Pecas {
   }
 
   
-  public void movimentoRei(Tabuleiro tabuleiro, Rei rei_jogador, String coordenada_da_peca, String coordenada_do_destino)
+  public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
 	char linhaChar_peca = coordenada_da_peca.charAt(1);
@@ -45,15 +46,15 @@ public class Rei extends Pecas {
 	}
 	
 	tabuleiro.matriz[linha_peca][coluna_peca] = null;
-	tabuleiro.matriz[linha_destino][coluna_destino] = rei_jogador;
+	tabuleiro.matriz[linha_destino][coluna_destino] = this;
 	
 	
   }
   
-  public void ataqueRei(Tabuleiro tabuleiro, Rei rei_jogador, String coordenada_rei, String coordenada_peca_inimiga)
+  public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
 	{
-		char colunaChar_rei = coordenada_rei.toLowerCase().charAt(0);
-		char linhaChar_rei = coordenada_rei.charAt(1);
+		char colunaChar_rei = coordenada_peca.toLowerCase().charAt(0);
+		char linhaChar_rei = coordenada_peca.charAt(1);
 		  
 		int coluna_rei = colunaChar_rei - 'a';
 		int linha_rei = 8 - Character.getNumericValue(linhaChar_rei);
@@ -74,12 +75,12 @@ public class Rei extends Pecas {
 		
 		Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 		  
-		if (peca_inimiga.getJogador() == rei_jogador.getJogador()) {
+		if (peca_inimiga.getJogador() == this.getJogador()) {
 			System.out.println("Movimento invalido! O rei nao pode atacar");
 			return ;
 		}
 		
-		tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = rei_jogador;
+		tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = this;
 		tabuleiro.matriz[linha_rei][coluna_rei] = null;
 		
 	}
