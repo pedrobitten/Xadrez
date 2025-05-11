@@ -19,9 +19,10 @@ public class Peao extends Pecas {
 	  return jogador;
   }
   
-  public void movimentoPeao(Tabuleiro tabuleiro, Peao peao_jogador, String coordenada_peca, String coordenada_destino)
+  //metodo de movimento do peao
+  public void movimento(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_destino)
   {
-	  
+	  	//Conversoes das coordenadas em inteiros
 		char colunaChar_peca = coordenada_peca.toLowerCase().charAt(0);
 		char linhaChar_peca = coordenada_peca.charAt(1);
 				  
@@ -36,11 +37,12 @@ public class Peao extends Pecas {
 				  
 		int diferenca_linha = linha_destino - linha_peca;
 				  
-		if (Math.abs(diferenca_linha) == 2 && peao_jogador.posicao != "original") {
+		if (Math.abs(diferenca_linha) == 2 && !this.posicao.equals("original")) {
 			System.out.println("Movimento invalido!");
 			return;
 		}
-				  
+		
+		//verificar se tem pecas no caminho
 		int inicio = Math.min(linha_peca, linha_destino);
 		int fim = Math.max(linha_peca, linha_destino);
 			      
@@ -52,20 +54,21 @@ public class Peao extends Pecas {
 			}
 		}
 				 
-		
-		peao_jogador.posicao = "diferente";
-		
-		tabuleiro.matriz[linha_destino][coluna_destino] = peao_jogador;
+
+		//Atualiza tabuleiro
+		this.posicao = "diferente";
+
+		tabuleiro.matriz[linha_destino][coluna_destino] = this;
 	
 		tabuleiro.matriz[linha_peca][coluna_peca] = null;
 				    
   }
   
-  public void ataquePeao(Tabuleiro tabuleiro, Peao peao_jogador, String coordenada_peao, String coordenada_peca_inimiga)
+  public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
   {
 	  //Testar para peao do jogador 2
-	  char colunaChar_peao = coordenada_peao.toLowerCase().charAt(0);
-	  char linhaChar_peao = coordenada_peao.charAt(1);
+	  char colunaChar_peao = coordenada_peca.toLowerCase().charAt(0);
+	  char linhaChar_peao = coordenada_peca.charAt(1);
 	  
 	  int coluna_peao = colunaChar_peao - 'a';
 	  int linha_peao = 8 - Character.getNumericValue(linhaChar_peao);
@@ -86,17 +89,15 @@ public class Peao extends Pecas {
 	  
 	  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 	  
-	  if (peca_inimiga.getJogador() == peao_jogador.getJogador()) {
+	  if (peca_inimiga.getJogador() == this.getJogador()) {
 		  System.out.println("Movimento inválido! O peão não pode atacar");
 		  return ;
 	  }
 	  
 	  
 
-	  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = peao_jogador;
+	  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = this;
 	  tabuleiro.matriz[linha_peao][coluna_peao] = null;
-	  
-	  
 	  
   }
   
