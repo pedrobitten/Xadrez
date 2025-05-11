@@ -18,7 +18,7 @@ public class Cavalo extends Pecas {
   }
 
   
-  public void movimentoCavalo(Tabuleiro tabuleiro, Cavalo cavalo_jogador, String coordenada_da_peca, String coordenada_do_destino)
+  public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	  	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
 		char linhaChar_peca = coordenada_da_peca.charAt(1);
@@ -39,7 +39,7 @@ public class Cavalo extends Pecas {
 		{
 			if (tabuleiro.matriz[linha_destino][coluna_destino] == null) {
 				tabuleiro.matriz[linha_peca][coluna_peca] = null;
-				tabuleiro.matriz[linha_destino][coluna_destino] = cavalo_jogador;
+				tabuleiro.matriz[linha_destino][coluna_destino] = this;
 			}
 			
 			else {
@@ -53,7 +53,7 @@ public class Cavalo extends Pecas {
 	  
   }
   
-  public void ataqueCavalo(Tabuleiro tabuleiro, Cavalo cavalo_jogador, String coordenada_cavalo, String coordenada_peca_inimiga)
+  public void ataque(Tabuleiro tabuleiro, String coordenada_cavalo, String coordenada_peca_inimiga)
   {
 	  char colunaChar_cavalo = coordenada_cavalo.toLowerCase().charAt(0);
 	  char linhaChar_cavalo = coordenada_cavalo.charAt(1);
@@ -75,13 +75,13 @@ public class Cavalo extends Pecas {
 	  {
 		  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 		  
-		  if (peca_inimiga.getJogador() == cavalo_jogador.getJogador()) {
+		  if (peca_inimiga.getJogador() == this.getJogador()) {
 			  System.out.println("Movimento inválido! O Cavalo não pode atacar");
 			  return ;
 		  }
 		  
 		  tabuleiro.matriz[linha_cavalo][coluna_cavalo] = null;
-		  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = cavalo_jogador;
+		  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = this;
 		  	
 		  	
 	  }
