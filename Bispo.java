@@ -16,7 +16,7 @@ public class Bispo extends Pecas {
     return jogador;
   }
   
-  public void movimentoBispo(Tabuleiro tabuleiro, Bispo bispo_jogador, String coordenada_da_peca, String coordenada_do_destino)
+  public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	  	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
 		char linhaChar_peca = coordenada_da_peca.charAt(1);
@@ -59,14 +59,14 @@ public class Bispo extends Pecas {
 		
 		
 		tabuleiro.matriz[linha_peca][coluna_peca] = null;
-		tabuleiro.matriz[linha_destino][coluna_destino] = bispo_jogador;
+		tabuleiro.matriz[linha_destino][coluna_destino] = this;
 	  
   }
   
-  public void ataqueBispo(Tabuleiro tabuleiro, Bispo bispo_jogador,  String coordenada_bispo, String coordenada_peca_inimiga)
+  public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
   {
-	  char colunaChar_bispo = coordenada_bispo.toLowerCase().charAt(0);
-	  char linhaChar_bispo = coordenada_bispo.charAt(1);
+	  char colunaChar_bispo = coordenada_peca.toLowerCase().charAt(0);
+	  char linhaChar_bispo = coordenada_peca.charAt(1);
 
 	  int coluna_bispo = colunaChar_bispo - 'a';
 	  int linha_bispo = 8 - Character.getNumericValue(linhaChar_bispo);
@@ -106,12 +106,12 @@ public class Bispo extends Pecas {
 
 	  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 
-	  if (peca_inimiga.getJogador() == bispo_jogador.getJogador()) {
+	  if (peca_inimiga.getJogador() == this.getJogador()) {
 		System.out.println("Movimento invalido! O bispo nao pode atacar");
 		return ;
 	  }
 	
-	  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = bispo_jogador;
+	  tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = this;
 	  tabuleiro.matriz[linha_bispo][coluna_bispo] = null;
 	
   }
