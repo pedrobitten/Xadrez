@@ -18,8 +18,9 @@ public class Torre extends Pecas {
   }
 
   
-
-  public void movimentoTorre(Tabuleiro tabuleiro, Torre torre_jogador,  String coordenada_da_peca, String coordenada_do_destino)
+  
+  
+  public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
 	char linhaChar_peca = coordenada_da_peca.charAt(1);
@@ -36,7 +37,7 @@ public class Torre extends Pecas {
 	boolean linha_reta = (coluna_peca == coluna_destino || linha_peca == linha_destino);
 	
 	if (!linha_reta) {
-		System.out.println("Movimento invÃ¡lido! A torre sÃ³ pode andar em linha reta.");
+		System.out.println("Movimento invalido! A torre so pode andar em linha reta.");
         return;
 	}
 	
@@ -46,7 +47,7 @@ public class Torre extends Pecas {
         for (int cont = inicio; cont < fim; cont++)
         {
             if (tabuleiro.matriz[linha_peca][cont] != null) {
-                System.out.println("HÃ¡ peÃ§as no caminho!");
+                System.out.println("Ha pecas no caminho!");
                 return;
             }
         }
@@ -58,7 +59,7 @@ public class Torre extends Pecas {
         for (int cont = inicio; cont < fim; cont++)
         {
             if (tabuleiro.matriz[cont][coluna_peca] != null) {
-                System.out.println("HÃ¡ peÃ§as no caminho!");
+                System.out.println("Ha pecas no caminho!");
                 return;
             }
         }
@@ -66,14 +67,14 @@ public class Torre extends Pecas {
 		  
 	
 	tabuleiro.matriz[linha_peca][coluna_peca] = null;
-	tabuleiro.matriz[linha_destino][coluna_destino] = torre_jogador;
+	tabuleiro.matriz[linha_destino][coluna_destino] = this;
 	
   }
   
-  public void ataqueTorre(Tabuleiro tabuleiro, Torre torre_jogador,  String coordenada_torre, String coordenada_peca_inimiga)
+  public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
   {
-	  char colunaChar_torre = coordenada_torre.toLowerCase().charAt(0);
-	  char linhaChar_torre = coordenada_torre.charAt(1);
+	  char colunaChar_torre = coordenada_peca.toLowerCase().charAt(0);
+	  char linhaChar_torre = coordenada_peca.charAt(1);
 
 	  int coluna_torre = colunaChar_torre - 'a';
 	  int linha_torre = 8 - Character.getNumericValue(linhaChar_torre);
@@ -117,12 +118,12 @@ public class Torre extends Pecas {
 	
 	Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 	
-	if (peca_inimiga.getJogador() == torre_jogador.getJogador()) {
+	if (peca_inimiga.getJogador() == this.getJogador()) {
 		System.out.println("Movimento invalido! A torre nao pode atacar");
 		return ;
 	}
 	
-	tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = torre_jogador;
+	tabuleiro.matriz[linha_peca_inimiga][coluna_peca_inimiga] = this;
 	tabuleiro.matriz[linha_torre][coluna_torre] = null;
 	
   }
