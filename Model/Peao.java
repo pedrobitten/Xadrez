@@ -37,10 +37,18 @@ public class Peao extends Pecas {
 		int linha_destino = 8 - Character.getNumericValue(linhaChar_destino);
 				  
 		int diferenca_linha = linha_destino - linha_peca;
+		
+		if (Math.abs(diferenca_linha) > 2) {
+			System.out.println("Movimento invalido! Peao nao pode andar mais de 2 casas");
+		}
 				  
 		if (Math.abs(diferenca_linha) == 2 && !this.posicao.equals("original")) {
-			System.out.println("Movimento invalido!");
+			System.out.println("Movimento invalido! Peao ja saiu da posicao original");
 			return;
+		}
+		
+		if (tabuleiro.matriz[linha_destino][coluna_destino] == null) {
+			System.out.println("Movimento invalido! Ha pecas no caminho!");
 		}
 		
 		//verificar se tem pecas no caminho
@@ -50,7 +58,7 @@ public class Peao extends Pecas {
 		for (int cont = inicio; cont < fim; cont++)
 		{
 			if (tabuleiro.matriz[cont][coluna_peca] != null) {
-				System.out.println("Ha pecas no caminho!");
+				System.out.println("Movimento invalido! Ha pecas no caminho!");
 				return;
 			}
 		}
