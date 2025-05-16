@@ -43,12 +43,12 @@ Casos de teste
 -> Testar movimento incorreto - 8
 -> Testar ataque a peca do próprio jogador - 8
 
-- Peao: 
+- Peao: (ok)
 
 * movimento: 12 testes
 
 -> Testar movimentos - 4 
--> Testar movimento incorreto - andar mais de 2 casas, andar 2 casas sabendo que	 o peao esta fora da posicao original, se pecas estao no caminho			
+-> Testar movimento incorreto - andar mais de 2 casas, andar 2 casas sabendo que o peao esta fora da posicao original, se pecas estao no caminho 			
 -> Testar movimento onde o destino está ocupado - 4
 (É o dobro pois peao pode andar 2 casas ou 1)
 
