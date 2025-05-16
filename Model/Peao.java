@@ -29,17 +29,22 @@ public class Peao extends Pecas {
 				  
 		int coluna_peca = colunaChar_peca - 'a';
 		int linha_peca = 8 - Character.getNumericValue(linhaChar_peca);
-				 
+						 
 		char colunaChar_destino = coordenada_destino.toLowerCase().charAt(0);
 		char linhaChar_destino = coordenada_destino.charAt(1);
 		
 		int coluna_destino = colunaChar_destino - 'a';
 		int linha_destino = 8 - Character.getNumericValue(linhaChar_destino);
-				  
+		
 		int diferenca_linha = linha_destino - linha_peca;
+		int direcao = (jogador == 1) ? -1 : 1;
+		
+
 		
 		if (Math.abs(diferenca_linha) > 2) {
+	
 			System.out.println("Movimento invalido! Peao nao pode andar mais de 2 casas");
+			return;
 		}
 				  
 		if (Math.abs(diferenca_linha) == 2 && !this.posicao.equals("original")) {
@@ -47,29 +52,39 @@ public class Peao extends Pecas {
 			return;
 		}
 		
-		if (tabuleiro.matriz[linha_destino][coluna_destino] == null) {
-			System.out.println("Movimento invalido! Ha pecas no caminho!");
+		
+		// Movimento reto 
+		if (coluna_peca == coluna_destino) {
+		    int distancia = linha_destino - linha_peca;
+
+		    // Movimento de 2 casas
+		    if (distancia == 2 * direcao) {
+		        int meio = linha_peca + direcao;
+		        if (tabuleiro.matriz[meio][coluna_peca] != null || tabuleiro.matriz[linha_destino][coluna_destino] != null) {
+		            System.out.println("Movimento invalido! Ha pecas no caminho!");
+		            return;
+		        }
+		    }
+
+		    // Movimento de 1 casa
+		    else if (distancia == 1 * direcao) {
+		        if (tabuleiro.matriz[linha_destino][coluna_destino] != null) {
+		            System.out.println("Movimento invalido! Casa destino ocupada!");
+		            return;
+		        }
+		    }
+
 		}
 		
-		//verificar se tem pecas no caminho
-		int inicio = Math.min(linha_peca, linha_destino);
-		int fim = Math.max(linha_peca, linha_destino);
-			      
-		for (int cont = inicio; cont < fim; cont++)
-		{
-			if (tabuleiro.matriz[cont][coluna_peca] != null) {
-				System.out.println("Movimento invalido! Ha pecas no caminho!");
-				return;
-			}
-		}
-				 
-
+		
 		//Atualiza tabuleiro
 		this.posicao = "diferente";
 
 		tabuleiro.matriz[linha_destino][coluna_destino] = this;
 	
 		tabuleiro.matriz[linha_peca][coluna_peca] = null;
+		
+		
 				    
   }
   
