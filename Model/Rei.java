@@ -36,7 +36,7 @@ public class Rei extends Pecas {
 	int diferenca_coluna = coluna_destino - coluna_peca;
 			
 	if (Math.abs(diferenca_linha) > 1 || Math.abs(diferenca_coluna) > 1) {
-		 System.out.println("Movimento invalido! O rei so pode andar uma casa em qualquer direÃ§Ã£o.");
+		 System.out.println("Movimento invalido! O rei so pode andar uma casa em qualquer direcao.");
 	     return;
 	}
 	
