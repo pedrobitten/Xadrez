@@ -240,5 +240,93 @@ public class PeaoTest {
 	}
 	
 	//testar ataque
+	@Test
+	public void testaCapturaPeaoJogador1DiagonalDireita() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Peao peao = new Peao("P1", 1);
+	    Peao inimigo = new Peao("P2", 2);
+	
+	    tabuleiro.matriz[6][4] = peao; // e2
+	    tabuleiro.matriz[5][5] = inimigo; // f3
+	
+	    tabuleiro.movimento(peao, tabuleiro, "e2", "f3");
+	    assertEquals(peao, tabuleiro.matriz[5][5]);
+	    assertNull(tabuleiro.matriz[6][4]);
+	}
+	
+	@Test
+	public void testaCapturaPeaoJogador1DiagonalEsquerda() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Peao peao = new Peao("P1", 1);
+	    Peao inimigo = new Peao("P2", 2);
+	
+	    tabuleiro.matriz[6][4] = peao; // e2
+	    tabuleiro.matriz[5][3] = inimigo; // d3
+	
+	    tabuleiro.movimento(peao, tabuleiro, "e2", "d3");
+	    assertEquals(peao, tabuleiro.matriz[5][3]);
+	    assertNull(tabuleiro.matriz[6][4]);
+	}
+	
+	@Test
+	public void testaCapturaPeaoJogador2DiagonalEsquerda() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Peao peao = new Peao("P2", 2);
+	    Peao inimigo = new Peao("P1", 1);
+	
+	    tabuleiro.matriz[1][4] = peao; // e7
+	    tabuleiro.matriz[2][3] = inimigo; // d6
+	
+	    tabuleiro.movimento(peao, tabuleiro, "e7", "d6");
+	    assertEquals(peao, tabuleiro.matriz[2][3]);
+	    assertNull(tabuleiro.matriz[1][4]);
+	}
+	
+	@Test
+	public void testaCapturaPeaoJogador2DiagonalDireita() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Peao peao = new Peao("P2", 2);
+	    Peao inimigo = new Peao("P1", 1);
+	
+	    tabuleiro.matriz[1][4] = peao; // e7
+	    tabuleiro.matriz[2][5] = inimigo; // f6
+	
+	    tabuleiro.movimento(peao, tabuleiro, "e7", "f6");
+	    assertEquals(peao, tabuleiro.matriz[2][5]);
+	    assertNull(tabuleiro.matriz[1][4]);
+	}
+
+	@Test
+	public void testaMovimentoPeaoJogador1DiagonalSemInimigo() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Peao peao = new Peao("P1", 1);
+	
+	    tabuleiro.matriz[6][4] = peao; // e2
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(peao, tabuleiro, "e2", "f3");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Movimento invalido! Peao so captura na diagonal com inimigo"));
+	}
+	
+	@Test
+	public void testaMovimentoPeaoJogador2DiagonalSemInimigo() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Peao peao = new Peao("P2", 2);
+	
+	    tabuleiro.matriz[1][4] = peao; // e7
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(peao, tabuleiro, "e7", "d6");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Movimento invalido! Peao so captura na diagonal com inimigo"));
+	}
+
 
 }
