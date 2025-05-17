@@ -48,7 +48,7 @@ public class Torre extends Pecas {
         for (int cont = inicio; cont < fim; cont++)
         {
             if (tabuleiro.matriz[linha_peca][cont] != null) {
-                System.out.println("Ha pecas no caminho!");
+                System.out.println("Movimento invalido! Ha pecas no caminho!");
                 return;
             }
         }
@@ -60,7 +60,7 @@ public class Torre extends Pecas {
         for (int cont = inicio; cont < fim; cont++)
         {
             if (tabuleiro.matriz[cont][coluna_peca] != null) {
-                System.out.println("Ha pecas no caminho!");
+                System.out.println("Movimento invalido! Ha pecas no caminho!");
                 return;
             }
         }
