@@ -266,6 +266,70 @@ public class RainhaTest {
         assertTrue(outContent.toString().contains("Movimento invalido para a Rainha!"));
         
 	}
+
+	@Test
+	public void testaCapturaRainha() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Rainha rainha = new Rainha("R1", 1);
+	    Peao inimigo = new Peao("P2", 2);
+	    tabuleiro.matriz[4][4] = rainha;
+	    tabuleiro.matriz[2][2] = inimigo;
 	
+	    tabuleiro.movimento(rainha, tabuleiro, "e4", "c6");
+	
+	    assertEquals(rainha, tabuleiro.matriz[2][2]);
+	    assertNull(tabuleiro.matriz[4][4]);
+	}
+	
+	@Test
+	public void testaMovimentoParaAliado() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Rainha rainha = new Rainha("R1", 1);
+	    Peao aliado = new Peao("P1", 1);
+	    tabuleiro.matriz[4][4] = rainha;
+	    tabuleiro.matriz[2][2] = aliado;
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(rainha, tabuleiro, "e4", "c6");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Movimento invalido! Ha uma peca sua no destino!"));
+	    assertEquals(rainha, tabuleiro.matriz[4][4]);
+	    assertEquals(aliado, tabuleiro.matriz[2][2]);
+	}
+	
+	@Test
+	public void testaMovimentoForaDoTabuleiro() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Rainha rainha = new Rainha("R1", 1);
+	    tabuleiro.matriz[0][0] = rainha;
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(rainha, tabuleiro, "a1", "z9");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Coordenada invalida!"));
+	    assertEquals(rainha, tabuleiro.matriz[0][0]);
+	}
+	
+	@Test
+	public void testaMovimentoMesmoLugar() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Rainha rainha = new Rainha("R1", 1);
+	    tabuleiro.matriz[4][4] = rainha;
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(rainha, tabuleiro, "e4", "e4");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Movimento invalido para a Rainha!"));
+	    assertEquals(rainha, tabuleiro.matriz[4][4]);
+	}
 	
 }
