@@ -50,7 +50,7 @@ public class Bispo extends Pecas {
 		while(linha != linha_destino && coluna != coluna_destino)
 		{
 			if (tabuleiro.matriz[linha][coluna] != null) {
-				System.out.println("Caminho bloqueado! Não é possível mover o bispo.");
+				System.out.println("Movimento invalido! Ha pecas no caminho!");
 	            return;
 			}
 			
