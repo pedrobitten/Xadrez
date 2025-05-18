@@ -240,5 +240,40 @@ public class BispoTest {
 		assertTrue(outContent.toString().contains("Movimento invalido! Ha pecas no caminho!"));
 	}
 	
+	@Test
+	public void testaCapturaBispoJogador1() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Bispo bispo = new Bispo("B1", 1);
+	    Peao peaoInimigo = new Peao("P2", 2);
+	
+	    tabuleiro.matriz[7][2] = bispo;
+	    tabuleiro.matriz[4][5] = peaoInimigo;
+	
+	    tabuleiro.matriz[6][3] = null;
+	    tabuleiro.matriz[5][4] = null;
+	
+	    tabuleiro.movimento(bispo, tabuleiro, "c1", "f4");
+	    assertEquals(bispo, tabuleiro.matriz[4][5]);
+	    assertNull(tabuleiro.matriz[7][2]);
+	    assertNotEquals(peaoInimigo, tabuleiro.matriz[4][5]);
+	}
+	
+	@Test
+	public void testaCapturaBispoJogador2() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Bispo bispo = new Bispo("B2", 2);
+	    Peao peaoInimigo = new Peao("P1", 1);
+	
+	    tabuleiro.matriz[0][2] = bispo;
+	    tabuleiro.matriz[3][5] = peaoInimigo;
+	
+	    tabuleiro.matriz[1][3] = null;
+	    tabuleiro.matriz[2][4] = null;
+	
+	    tabuleiro.movimento(bispo, tabuleiro, "c8", "f5");
+	    assertEquals(bispo, tabuleiro.matriz[3][5]);
+	    assertNull(tabuleiro.matriz[0][2]);
+	    assertNotEquals(peaoInimigo, tabuleiro.matriz[3][5]);
+	}
 	
 }
