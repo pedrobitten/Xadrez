@@ -197,5 +197,72 @@ public class TorreTest {
 		assertTrue(outContent.toString().contains("Movimento invalido! Ha pecas no caminho!"));
 		
 	}
+
+	@Test
+	public void testaCapturaPecaInimigaTorreJogador1() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Torre torre = new Torre("T1", 1);
+	    Peao inimigo = new Peao("P2", 2);
+	    
+	    tabuleiro.matriz[5][2] = torre;   // c3
+	    tabuleiro.matriz[2][2] = inimigo; // c6
+	
+	    tabuleiro.movimento(torre, tabuleiro, "c3", "c6");
+	
+	    assertEquals(torre, tabuleiro.matriz[2][2]);
+	    assertNull(tabuleiro.matriz[5][2]);
+	}
+
+	@Test
+	public void testaCapturaPecaAliadaTorreJogador1() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Torre torre = new Torre("T1", 1);
+	    Peao aliado = new Peao("P1", 1);
+	    
+	    tabuleiro.matriz[5][2] = torre;   // c3
+	    tabuleiro.matriz[2][2] = aliado;  // c6
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	    
+	    tabuleiro.movimento(torre, tabuleiro, "c3", "c6");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Movimento invalido! Ha uma peca aliada no destino."));
+	    assertEquals(torre, tabuleiro.matriz[5][2]); // não moveu
+	    assertEquals(aliado, tabuleiro.matriz[2][2]);
+	}
+
+	@Test
+	public void testaMovimentoParaMesmaPosicaoTorre() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Torre torre = new Torre("T1", 1);
+	    
+	    tabuleiro.matriz[5][2] = torre; // c3
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(torre, tabuleiro, "c3", "c3");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Movimento invalido! A torre deve se mover para uma nova casa."));
+	}
+
+	@Test
+	public void testaMovimentoForaDoTabuleiroTorre() {
+	    Tabuleiro tabuleiro = new Tabuleiro();
+	    Torre torre = new Torre("T1", 1);
+	    
+	    tabuleiro.matriz[5][2] = torre; // c3
+	
+	    ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+	    System.setOut(new PrintStream(outContent));
+	
+	    tabuleiro.movimento(torre, tabuleiro, "c3", "z9");
+	
+	    System.setOut(System.out);
+	    assertTrue(outContent.toString().contains("Coordenada invalida!"));
+	}
 	
 }
