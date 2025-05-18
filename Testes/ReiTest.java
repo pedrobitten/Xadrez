@@ -328,37 +328,33 @@ public class ReiTest {
 		assertTrue(outContent.toString().contains("Movimento invalido! Ja existe uma peca na posicao de destino"));
 		
 	}
-	
 	@Test
 	public void testaCapturaReiJogador1() {
 	    Tabuleiro tabuleiro = new Tabuleiro();
 	    Rei rei = new Rei("r1", 1);
-	    Peao peaoInimigo = new Peao("P2", 2);
-	    
-	    tabuleiro.matriz[4][3] = rei;        
-	    tabuleiro.matriz[3][3] = peaoInimigo; 
-	    
-	    tabuleiro.movimento(rei, tabuleiro, "d4", "d5"); 
-	    
-	    assertEquals(rei, tabuleiro.matriz[3][3]); 
-	    assertNull(tabuleiro.matriz[4][3]);        
-	    assertNull(tabuleiro.matriz[3][3] == peaoInimigo); 
+	    tabuleiro.matriz[4][3] = rei;
+	
+	    Peao peaoAdversario = new Peao("P2", 2);
+	    tabuleiro.matriz[3][3] = peaoAdversario;
+
+	    tabuleiro.movimento(rei, tabuleiro, "d4", "d5");
+	    assertEquals(rei, tabuleiro.matriz[3][3]);
+	    assertNull(tabuleiro.matriz[4][3]);
 	}
 
 	@Test
 	public void testaCapturaReiJogador2() {
 	    Tabuleiro tabuleiro = new Tabuleiro();
 	    Rei rei = new Rei("r2", 2);
+	    tabuleiro.matriz[4][4] = rei; 
+	    
 	    Peao peaoInimigo = new Peao("P1", 1);
+	    tabuleiro.matriz[3][3] = peaoInimigo;
 	    
-	    tabuleiro.matriz[4][4] = rei;        
-	    tabuleiro.matriz[3][4] = peaoInimigo; 
-	    
-	    tabuleiro.movimento(rei, tabuleiro, "e4", "e5"); 
-	    
-	    assertEquals(rei, tabuleiro.matriz[3][4]); 
-	    assertNull(tabuleiro.matriz[4][4]);       
-	    assertNull(tabuleiro.matriz[3][4] == peaoInimigo); 
+	    tabuleiro.movimento(rei, tabuleiro, "e4", "d5");
+	    assertEquals(rei, tabuleiro.matriz[3][3]);
+	    assertNull(tabuleiro.matriz[4][4]);
+	    assertNotEquals(peaoInimigo, tabuleiro.matriz[3][3]);
 	}
 
 }
