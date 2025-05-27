@@ -3,7 +3,7 @@ public abstract class Pecas {
 
   public abstract String getPeca();
   
-  public abstract int getJogador();
+  public abstract String getCor();
   
   public abstract void movimento(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_destino);
 
