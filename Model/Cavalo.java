@@ -1,21 +1,21 @@
 package Model;
 public class Cavalo extends Pecas {
 
-  private String cavalo_do_jogador;
-  public int jogador;
+	private String cor_jogador;
+	private String tipo_peca;
   
-  public Cavalo(String cavalo_J, int jogador_1_ou_2){
-    cavalo_do_jogador = cavalo_J;
-    jogador = jogador_1_ou_2;
+  public Cavalo(String cor, String tipo ){
+    cor_jogador = cor;
+    tipo_peca = tipo;
   }
   
 
   public String getPeca(){
-    return cavalo_do_jogador;
+    return tipo_peca;
   }
   
-  public int getJogador() {
-	  return jogador;
+  public String getCor() {
+	  return cor_jogador;
   }
 
   
@@ -76,7 +76,7 @@ public class Cavalo extends Pecas {
 	  {
 		  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 		  
-		  if (peca_inimiga.getJogador() == this.getJogador()) {
+		  if (peca_inimiga.getCor() == this.getCor()) {
 			  System.out.println("Movimento inválido! O Cavalo não pode atacar");
 			  return ;
 		  }
