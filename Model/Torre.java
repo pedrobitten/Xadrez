@@ -1,21 +1,20 @@
 package Model;
 public class Torre extends Pecas {
 
-  private String torre_do_jogador;
-  private int jogador;
+	private String cor_jogador;
+	private String tipo_peca;
   
-  
-  public Torre(String torre_J, int jogador_1_ou_2){
-    torre_do_jogador = torre_J;
-    jogador = jogador_1_ou_2;
+  public Torre(String cor, String tipo){
+    cor_jogador = cor;
+    tipo_peca = tipo;
   }
   
   public String getPeca(){
-    return torre_do_jogador;
+    return tipo_peca;
   }
   
-  public int getJogador() {
-	  return jogador;
+  public String getCor() {
+	  return cor_jogador;
   }
 
   
@@ -119,7 +118,7 @@ public class Torre extends Pecas {
 	
 	Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 	
-	if (peca_inimiga.getJogador() == this.getJogador()) {
+	if (peca_inimiga.getCor() == this.getCor()) {
 		System.out.println("Movimento invalido! A torre nao pode atacar");
 		return ;
 	}
