@@ -1,20 +1,20 @@
 package Model;
 public class Rei extends Pecas {
 
-  private String rei_do_jogador;
-  public int jogador;
+	private String cor_jogador;
+	private String tipo_peca;
   
-  public Rei(String rei_J, int jogador_1_ou_2){
-    rei_do_jogador = rei_J;
-    jogador = jogador_1_ou_2;
+  public Rei(String cor, String tipo){
+    cor_jogador = cor;
+    tipo_peca = tipo;
   }
   
   public String getPeca(){
-    return rei_do_jogador;
+    return tipo_peca;
   }
   
-  public int getJogador() {
-	  return jogador;
+  public String getCor() {
+	  return cor_jogador;
   }
 
   
@@ -75,7 +75,7 @@ public class Rei extends Pecas {
 		
 		Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 		  
-		if (peca_inimiga.getJogador() == this.getJogador()) {
+		if (peca_inimiga.getCor() == this.getCor()) {
 			System.out.println("Movimento invalido! O rei nao pode atacar");
 			return ;
 		}
