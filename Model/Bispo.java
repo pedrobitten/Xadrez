@@ -1,20 +1,20 @@
 package Model;
 public class Bispo extends Pecas {
 
-  private String bispo_do_jogador;
-  private int jogador;
+  private String cor_jogador;
+  private String tipo_peca;
   
-  public Bispo(String bispo_J, int jogador_1_ou_2){
-    bispo_do_jogador = bispo_J;
-    jogador = jogador_1_ou_2;
+  public Bispo(String cor, String tipo){
+    cor_jogador = cor;
+    tipo_peca = tipo;
   }
   
   public String getPeca(){
-    return bispo_do_jogador;
+    return tipo_peca;
   }
   
-  public int getJogador() {
-    return jogador;
+  public String getCor() {
+    return cor_jogador;
   }
   
   public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
@@ -107,7 +107,7 @@ public class Bispo extends Pecas {
 
 	  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 
-	  if (peca_inimiga.getJogador() == this.getJogador()) {
+	  if (peca_inimiga.getCor() == this.getCor()) {
 		System.out.println("Movimento invalido! O bispo nao pode atacar");
 		return ;
 	  }
