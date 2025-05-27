@@ -1,20 +1,20 @@
 package Model;
 public class Rainha extends Pecas {
 
-  private String rainha_do_jogador;
-  public int jogador;
+	private String cor_jogador;
+	private String tipo_peca;
   
-  public Rainha(String rainha_J, int jogador_1_ou_2){
-    rainha_do_jogador = rainha_J;
-    jogador = jogador_1_ou_2;
+  public Rainha(String cor, String tipo){
+    cor_jogador = cor;
+    tipo_peca = tipo;
   }
   
   public String getPeca(){
-    return rainha_do_jogador;
+    return tipo_peca;
   }
   
-  public int getJogador() {
-	  return jogador;
+  public String getCor() {
+	  return cor_jogador;
   }
 
 
@@ -40,20 +40,18 @@ public class Rainha extends Pecas {
 	boolean movimento_reto = diferenca_linha == 0 || diferenca_coluna == 0;
 			
 	if (movimento_diagonal || movimento_reto) {
-		
-		//if (movimento_diagonal == true) {
-			//DireÃ§Ã£o da movimentaÃ§Ã£o
+	
 			int direcao_linha = Integer.signum(diferenca_linha);
 			int direcao_coluna = Integer.signum(diferenca_coluna);
 					
 			int linha = linha_peca + direcao_linha;
 			int coluna = coluna_peca + direcao_coluna;
 					
-					//Verificando se hÃ¡ peÃ§as no meio do caminho
+			//Verificando se hÃ¡ peÃ§as no meio do caminho
 			while(linha != linha_destino ||  coluna != coluna_destino)
 			{
 				if (tabuleiro.matriz[linha][coluna] != null) {
-					System.out.println("Caminho bloqueado! NÃ£o Ã© possÃ­vel mover a rainha.");
+					System.out.println("Movimento invalido! Ha pecas no caminho!");
 				    return;
 				}
 						
@@ -69,7 +67,7 @@ public class Rainha extends Pecas {
 	}
   
   	else {
-		System.out.println("Movimento invÃ¡lido para a Rainha!");
+		System.out.println("Movimento invalido para a Rainha!");
 	}
 	
 }
@@ -119,7 +117,7 @@ public class Rainha extends Pecas {
 			
 			Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 				  
-			if (peca_inimiga.getJogador() == this.getJogador()) {
+			if (peca_inimiga.getCor() == this.getCor()) {
 				System.out.println("Movimento invalido! A rainha nao pode atacar");
 				return ;
 			}
