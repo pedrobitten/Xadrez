@@ -2,17 +2,14 @@ package View;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import Model.Bispo;
-import Model.Cavalo;
-import Model.Rainha;
-import Model.Rei;
-import Model.Torre;
 
 import java.awt.*;
 import java.awt.geom.*;
 import java.io.File;
 import java.io.IOException;
-
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import Model.*;
 
 
 public class DesenhaTabuleiro extends JPanel {
@@ -25,9 +22,40 @@ public class DesenhaTabuleiro extends JPanel {
 		    "p_torre", "p_cavalo", "p_bispo", "p_dama", "p_rei", "p_bispo", "p_cavalo", "p_torre"
 	};
 	
+	private Tabuleiro tabuleiro = new Tabuleiro(); 
+	
+	private String turno = "branco";
+	private boolean peca_selecionada = false;
+	private boolean peao_j1_selecionado = false;
+	
+	private boolean mouse_esquerdo = false;
+	public int coordenada_x = -1;
+	public int coordenada_y = -1;
+	public int tileWidth;
+    public int tileHeight; 
+	
 	public DesenhaTabuleiro() {
 		carregarImagens();
+		
+		this.addMouseListener(new Mouse(this)
+		{
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tileWidth = getWidth() / 8;
+	            tileHeight = getHeight() / 8;
 
+				coordenada_x = e.getX() / tileWidth; // coluna
+				coordenada_y = e.getY() / tileHeight; //linha
+				//System.out.println("Foi clique");
+				System.out.print(coordenada_y);
+				notificaClickEmPeca();
+				
+			}
+			
+		});
+		
+		
+		
 	}
 	
 	private void carregarImagens() {
@@ -142,5 +170,77 @@ public class DesenhaTabuleiro extends JPanel {
 			g2d.drawImage(imagens_peca[8 + coluna], coluna * tileWidth, linha * tileHeight, tileWidth, tileHeight, null);
 		}
 		
+
+		//repaint();
+		
 	}
+	
+	private void notificaClickEmPeca() {
+		
+		int linha = coordenada_y;
+		int coluna = coordenada_x;
+		
+		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
+			return;
+		}
+		
+		Pecas pecaClicada = tabuleiro.matriz[linha][coluna];
+		
+		if (pecaClicada != null) {
+			
+			if (pecaClicada.getCor() == turno) {
+				if (pecaClicada.getPeca().equalsIgnoreCase("peao")) {
+	                JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Peão clicado");
+	                peca_selecionada = true;
+	                peao_j1_selecionado = true;
+	            }
+				
+				else if (pecaClicada.getPeca().equalsIgnoreCase("bispo")) {
+	                JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Bispo clicado");
+	            }
+				
+				else if (pecaClicada.getPeca().equalsIgnoreCase("torre")) {
+	                JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Torre clicado");
+	            }
+				
+				else if (pecaClicada.getPeca().equalsIgnoreCase("rei")) {
+	                JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rei clicado");
+	            }
+				
+				else if (pecaClicada.getPeca().equalsIgnoreCase("rainha")) {
+	                JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rainha clicado");
+	            }
+				
+				else if (pecaClicada.getPeca().equalsIgnoreCase("cavalo")) {
+	                JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Cavalo clicado");
+	            }
+				
+				//Mudanca de turno
+				if (turno == "branco") {
+					turno = "preto";
+				}
+				
+				else {
+					turno = "branco";
+				}
+			}
+			
+		}
+		
+		else {
+			JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Espaco vazio clicado");
+		}
+		
+		
+	}
+	
+	private void jogadas() {
+		notificaClickEmPeca();
+		//pinta os quadrados em vermelho
+		//Movimento da peca
+		//Termino da jogada
+	}
+	
+		
 }
+
