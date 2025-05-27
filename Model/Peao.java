@@ -1,106 +1,92 @@
 package Model;
 public class Peao extends Pecas {
   
-  private String peao_do_jogador;
-  private int jogador;
+  private String cor_jogador;
+  private String tipo_peca;
   public String posicao;
   
-  public Peao(String peao_J, int jogador_1_ou_2){
-    peao_do_jogador = peao_J;
-    jogador = jogador_1_ou_2;
+  public Peao(String cor, String tipo){
+    cor_jogador = cor;
+    tipo_peca = tipo;
     posicao = "original";
   }
   
   
   public String getPeca(){
-    return peao_do_jogador;
+    return tipo_peca;
   }
   
-  public int getJogador() {
-	  return jogador;
+  public String getCor() {
+	  return cor_jogador;
   }
   
   //metodo de movimento do peao
   public void movimento(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_destino)
   {
-	  //Conversoes das coordenadas em inteiros
-	  char colunaChar_peca = coordenada_peca.toLowerCase().charAt(0);
-	  char linhaChar_peca = coordenada_peca.charAt(1);
-					  
-	  int coluna_peca = colunaChar_peca - 'a';
-	  int linha_peca = 8 - Character.getNumericValue(linhaChar_peca);
-							 
-	  char colunaChar_destino = coordenada_destino.toLowerCase().charAt(0);
-	  char linhaChar_destino = coordenada_destino.charAt(1);
-			
-	  int coluna_destino = colunaChar_destino - 'a';
-	  int linha_destino = 8 - Character.getNumericValue(linhaChar_destino);
-			
-	  int diferenca_linha = linha_destino - linha_peca;
-	  int direcao = (jogador == 1) ? -1 : 1;
-			
+	  	//Conversoes das coordenadas em inteiros
+		char colunaChar_peca = coordenada_peca.toLowerCase().charAt(0);
+		char linhaChar_peca = coordenada_peca.charAt(1);
+				  
+		int coluna_peca = colunaChar_peca - 'a';
+		int linha_peca = 8 - Character.getNumericValue(linhaChar_peca);
+						 
+		char colunaChar_destino = coordenada_destino.toLowerCase().charAt(0);
+		char linhaChar_destino = coordenada_destino.charAt(1);
+		
+		int coluna_destino = colunaChar_destino - 'a';
+		int linha_destino = 8 - Character.getNumericValue(linhaChar_destino);
+		
+		int diferenca_linha = linha_destino - linha_peca;
+		int direcao = (cor_jogador == "Branca") ? -1 : 1;
+		
+		//System.out.print(diferenca_linha);
+		//System.out.print("\n");
+		
+		if (Math.abs(diferenca_linha) > 2) {
+			//System.out.println("Foi condicao");
+			System.out.println("Movimento invalido! Peao nao pode andar mais de 2 casas");
+			return;
+		}
+				  
+		if (Math.abs(diferenca_linha) == 2 && !this.posicao.equals("original")) {
+			System.out.println("Movimento invalido! Peao ja saiu da posicao original");
+			return;
+		}
+		
+		
+		// Movimento reto 
+		if (coluna_peca == coluna_destino) {
+		    int distancia = linha_destino - linha_peca;
 
-			
-	  if (Math.abs(diferenca_linha) > 2) {
-		  System.out.println("Movimento invalido! Peao nao pode andar mais de 2 casas");
-		  return;
-	  }
-					  
-	  if (Math.abs(diferenca_linha) == 2 && !this.posicao.equals("original")) {
-		  System.out.println("Movimento invalido! Peao ja saiu da posicao original");
-		  return;
-	  }
-			
-			
-	  // Movimento reto 
-	  if (coluna_peca == coluna_destino) {
-		  int distancia = linha_destino - linha_peca;
+		    // Movimento de 2 casas
+		    if (distancia == 2 * direcao) {
+		        int meio = linha_peca + direcao;
+		        if (tabuleiro.matriz[meio][coluna_peca] != null || tabuleiro.matriz[linha_destino][coluna_destino] != null) {
+		            System.out.println("Movimento invalido! Ha pecas no caminho!");
+		            return;
+		        }
+		    }
 
-		  // Movimento de 2 casas
-		  if (distancia == 2 * direcao) {
-			  int meio = linha_peca + direcao;
-			  
-			  if (tabuleiro.matriz[meio][coluna_peca] != null || tabuleiro.matriz[linha_destino][coluna_destino] != null) {
-				  System.out.println("Movimento invalido! Ha pecas no caminho!");
-				  return;
-			  }
-		  }
+		    // Movimento de 1 casa
+		    else if (distancia == 1 * direcao) {
+		        if (tabuleiro.matriz[linha_destino][coluna_destino] != null) {
+		            System.out.println("Movimento invalido! Casa destino ocupada!");
+		            return;
+		        }
+		    }
 
-		  // Movimento de 1 casa
-		  else if (distancia == 1 * direcao) {
-			  if (tabuleiro.matriz[linha_destino][coluna_destino] != null) {
-				  System.out.println("Movimento invalido! Casa destino ocupada!");
-				  return;
-			  }
-		  }
-
-	  }
+		}
+		
 		
 		//Atualiza tabuleiro
+		this.posicao = "diferente";
+
+		tabuleiro.matriz[linha_destino][coluna_destino] = this;
+	
+		tabuleiro.matriz[linha_peca][coluna_peca] = null;
 		
 		
-		//Corrigir a promoção
-		if (linha_destino == 0 & this.getJogador() == 1) {
-			tabuleiro.matriz[linha_peca][coluna_peca] = null;
-			tabuleiro.matriz[linha_destino][coluna_destino] = new Rainha("R1", 1);
-		}
-		
-		else if (linha_destino == 7 & this.getJogador() == 2) {
-			tabuleiro.matriz[linha_peca][coluna_peca] = null;
-			tabuleiro.matriz[linha_destino][coluna_destino] = new Rainha("R2", 2);
-		
-		}
-		
-		else {
-			
-			this.posicao = "diferente";
-			
-			tabuleiro.matriz[linha_destino][coluna_destino] = this;
-			
-			tabuleiro.matriz[linha_peca][coluna_peca] = null;
-		}
-				 
-					    
+				    
   }
   
   public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
@@ -128,7 +114,7 @@ public class Peao extends Pecas {
 	  
 	  Pecas peca_inimiga = tabuleiro.getPecaNaPosicao(coordenada_peca_inimiga);
 	  
-	  if (peca_inimiga.getJogador() == this.getJogador()) {
+	  if (peca_inimiga.getCor() == this.getCor()) {
 		  System.out.println("Movimento inválido! O peão não pode atacar");
 		  return ;
 	  }
