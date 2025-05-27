@@ -9,19 +9,19 @@ public class Tabuleiro {
   public Tabuleiro(){
     
     //Posicionar as pecas do jogador2 
-    matriz[0][0] = new Torre("T2", 2);
-    matriz[0][7] = new Torre("T2", 2);
-    matriz[0][1] = new Cavalo("C2", 2);
-    matriz[0][6] = new Cavalo("C2", 2);
-    matriz[0][2] = new Bispo("B2", 2);
-    matriz[0][5] = new Bispo("B2", 2);
-    matriz[0][3] = new Rainha("R2", 2);
-    matriz[0][4] = new Rei("r2", 2);
+    matriz[0][0] = new Torre("preto", "torre");
+    matriz[0][7] = new Torre("preto", "torre");
+    matriz[0][1] = new Cavalo("preto", "cavalo");
+    matriz[0][6] = new Cavalo("preto", "cavalo");
+    matriz[0][2] = new Bispo("preto", "bispo");
+    matriz[0][5] = new Bispo("preto", "bispo");
+    matriz[0][3] = new Rainha("preto", "rainha");
+    matriz[0][4] = new Rei("preto", "rei");
     
     //Posicionar peao do jogador2
     for (cont2 = 0; cont2 < 8; cont2++)
     {
-      matriz[1][cont2] = new Peao("P2", 2);
+      matriz[1][cont2] = new Peao("preto", "peao");
     }
     
     //Resto do Tabuleiro
@@ -36,25 +36,19 @@ public class Tabuleiro {
     //Posicionar peao do jogador1
     for (cont2 = 0; cont2 < 8; cont2++)
     {
-      matriz[6][cont2] = new Peao("P1", 1);
+      matriz[6][cont2] = new Peao("branco", "peao");
     }
-    
-    //apenas teste
-    
-   
-    
-    //matriz[6][4] = null;
 
-    
+
     //Posicionar as pecas do jogador1
-    matriz[7][0] = new Torre("T1", 1);
-    matriz[7][7] = new Torre("T1", 1);
-    matriz[7][1] = new Cavalo("C1", 1);
-    matriz[7][6] = new Cavalo("C1", 1);
-    matriz[7][2] = new Bispo("B1", 1);
-    matriz[7][5] = new Bispo("B1", 1);
-    matriz[7][3] = new Rainha("R1", 1);
-    matriz[7][4] = new Rei("r1", 1);
+    matriz[7][0] = new Torre("branco", "torre");
+    matriz[7][7] = new Torre("branco", "torre");
+    matriz[7][1] = new Cavalo("branco", "cavalo");
+    matriz[7][6] = new Cavalo("branco", "cavalo");
+    matriz[7][2] = new Bispo("branco", "bispo");
+    matriz[7][5] = new Bispo("branco", "bispo");
+    matriz[7][3] = new Rainha("branco", "rainha");
+    matriz[7][4] = new Rei("branco", "rei");
     
   }
   
