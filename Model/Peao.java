@@ -1,4 +1,7 @@
 package Model;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 public class Peao extends Pecas {
   
   private String cor_jogador;
@@ -9,6 +12,20 @@ public class Peao extends Pecas {
     cor_jogador = cor;
     tipo_peca = tipo;
     posicao = "original";
+    
+    try {
+    	if (cor.equals("branco")) {
+    		imagem = ImageIO.read(new File("D:/java_2025.1/Pecas/Pecas_1/b_peao.gif"));
+    	}
+    	
+    	else {
+            this.imagem = ImageIO.read(new File("D:/java_2025.1/Pecas/Pecas_1/p_peao.gif"));
+        }
+    	
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    
   }
   
   
@@ -19,6 +36,7 @@ public class Peao extends Pecas {
   public String getCor() {
 	  return cor_jogador;
   }
+  
   
   //metodo de movimento do peao
   public void movimento(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_destino)
@@ -37,7 +55,7 @@ public class Peao extends Pecas {
 		int linha_destino = 8 - Character.getNumericValue(linhaChar_destino);
 		
 		int diferenca_linha = linha_destino - linha_peca;
-		int direcao = (cor_jogador == "Branca") ? -1 : 1;
+		int direcao = (cor_jogador == "branco") ? -1 : 1;
 		
 		//System.out.print(diferenca_linha);
 		//System.out.print("\n");
