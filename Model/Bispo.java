@@ -1,4 +1,8 @@
 package Model;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 public class Bispo extends Pecas {
 
   private String cor_jogador;
@@ -7,6 +11,16 @@ public class Bispo extends Pecas {
   public Bispo(String cor, String tipo){
     cor_jogador = cor;
     tipo_peca = tipo;
+    
+    try {
+        if (cor.equals("branco")) {
+            imagem = ImageIO.read(new File("D:/java_2025.1/Pecas/Pecas_1/b_bispo.gif"));
+        } else {
+            imagem = ImageIO.read(new File("D:/java_2025.1/Pecas/Pecas_1/p_bispo.gif"));
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
   }
   
   public String getPeca(){
