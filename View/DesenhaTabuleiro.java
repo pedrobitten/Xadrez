@@ -10,7 +10,7 @@ public class DesenhaTabuleiro extends JPanel {
 
 	private Tabuleiro tabuleiro = new Tabuleiro(); 
 
-	private String turno = "preto";
+	private String turno = "branco";
 	
 	private Pecas peca_selecionada = null;
 	private boolean jogada_iniciada = false;
@@ -27,8 +27,7 @@ public class DesenhaTabuleiro extends JPanel {
 	private boolean rei_ja_movimentou_jogador1 = false;
 	private boolean rei_ja_movimentou_jogador2 = false;
 	private Pecas torre_escolhida = null;
-	private boolean jogada_reiniciada = false;
-	
+
 	private int coordenada_x = -1;
 	private int coordenada_y = -1;
 	private int linha = -1;
@@ -52,7 +51,10 @@ public class DesenhaTabuleiro extends JPanel {
 				coordenada_x = e.getX() / tileWidth; // coluna
 				coordenada_y = e.getY() / tileHeight; //linha
 				
-				notificaClickEmPeca(); // desativar a funcao
+	
+				
+				
+				notificaClickEmPeca(); 
 				escolheCasaDestino(vetor_de_coordenadas);
 			}
 			
@@ -136,6 +138,7 @@ public class DesenhaTabuleiro extends JPanel {
 				if (peca != null) {
 					 g2d.drawImage(peca.getImage(), j * tileWidth, i * tileHeight, tileWidth, tileHeight, null);
 				}
+				
 			}
 		}
 		
@@ -150,12 +153,29 @@ public class DesenhaTabuleiro extends JPanel {
 			return ;
 		}
 		
-		
 		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
 			return;
 		}
 		
 		Pecas pecaClicada = tabuleiro.matriz[linha][coluna];
+		
+		/*
+		if (peca_selecionada != null) {
+			if (pecaClicada != null && pecaClicada.getCor() == peca_selecionada.getCor()) {
+				jogadaReiniciada();
+				
+				jogada_iniciada = true;
+				notifica_click_em_peca = false;
+				peca_selecionada = pecaClicada;
+				linha_antiga = coordenada_y;
+				coluna_antiga = coordenada_x;
+				
+				repaint();
+				return ;
+				
+			}
+		}
+		*/
 		
 		
 		if (pecaClicada != null) {
@@ -163,52 +183,39 @@ public class DesenhaTabuleiro extends JPanel {
 			if (pecaClicada.getCor() == turno) {
 				if (pecaClicada.getPeca().equalsIgnoreCase("peao")) {
 					
-					if (jogada_reiniciada == false) {
-						JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Peão clicado");
-					}
+					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Peão clicado");
 	                
 	            }
 				
 				else if (pecaClicada.getPeca().equalsIgnoreCase("bispo")) {
 					
-					if (jogada_reiniciada == false) {
-						JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Bispo clicado");
-					}
+					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Bispo clicado");
 					
 	            }
 				
 				else if (pecaClicada.getPeca().equalsIgnoreCase("torre")) {
-	                
-					if (jogada_reiniciada == false) {
-						JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Torre clicado");
-					}
+	               
+					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Torre clicado");
 					
 	            }
 				
 				else if (pecaClicada.getPeca().equalsIgnoreCase("rei")) {
 	                
-					if (jogada_reiniciada == false) {
-						JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rei clicado");
-
-					}
+					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rei clicado");
 					
 	            }
 				
 				else if (pecaClicada.getPeca().equalsIgnoreCase("rainha")) {
 					
-					if (jogada_reiniciada == false) {
-						JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rainha clicado");
-					}
-					
-	                
+				
+					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rainha clicado");
 
 	            }
 				
 				else if (pecaClicada.getPeca().equalsIgnoreCase("cavalo")) {
 	                
-					if (jogada_reiniciada == false) {
-						JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Cavalo clicado");
-					}
+				
+					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Cavalo clicado");
 					
 	            }
 				
@@ -236,6 +243,10 @@ public class DesenhaTabuleiro extends JPanel {
 			return;
 		}
 		
+		if (peca_selecionada == null) {
+			return;
+		}
+		
 		
 		linha = coordenada_y;
 		coluna = coordenada_x;
@@ -247,58 +258,37 @@ public class DesenhaTabuleiro extends JPanel {
 		ArrayList<ArrayList<Integer>> coordenadas_horizontal = new ArrayList<>();
 		ArrayList<ArrayList<Integer>> coordenadas_cavalo = new ArrayList<>();
 		
-		System.out.print(coordenada_y);
-		System.out.print(coordenada_x);
-		
 		if (peca_selecionada.getPeca() == "peao") {
 			
 
 			
 			int direcao = (peca_selecionada.getCor() == "branco") ? -1 : 1;
-			int ultima_linha = -1;
+			int linha_atual = linha;
+			int coluna_atual = coluna;
 			
-			for (int i = 1; i < 2; i ++)
-			{
-				int nova_linha = linha + (i  * direcao);
-				if(movimentoPeao(g2d, nova_linha, coluna, i)) {
+			int linha_frente = linha_atual + direcao;
+			
+			if(movimentoPeao(g2d, linha_frente, coluna_atual, coordenadas_vertical)) {
 					
-					coordenadas_casas_possiveis = new ArrayList<>();
-					coordenadas_casas_possiveis.add(nova_linha);
-					coordenadas_casas_possiveis.add(coluna);
-					coordenadas_vertical.add(coordenadas_casas_possiveis);
-					ultima_linha = nova_linha;
+				boolean peao_na_base = (peca_selecionada.getCor().equals("branco") && linha_atual == 6) ||
+                        (peca_selecionada.getCor().equals("preto") && linha_atual == 1);
+				
+				if (peao_na_base) {
+					int linha_dois_passos = linha_atual + (2 * direcao);
+					
+					movimentoPeao(g2d, linha_dois_passos, coluna_atual, coordenadas_vertical);
 				}
 				
-				else {
-					ultima_linha = nova_linha;
-					break;
-				}
-				
-				
 			}
-				
-				
-			if (ataquePeao(g2d, ultima_linha, coluna + 1, peca_selecionada.getCor())) {
-					 	coordenadas_casas_possiveis = new ArrayList<>();
-				        coordenadas_casas_possiveis.add(ultima_linha);
-				        coordenadas_casas_possiveis.add(coluna + 1);
-				        coordenadas_diagonal.add(coordenadas_casas_possiveis);
-			}
-				
-				
-				
-			if (ataquePeao(g2d, ultima_linha, coluna - 1, peca_selecionada.getCor())) {
-					coordenadas_casas_possiveis = new ArrayList<>();
-			        coordenadas_casas_possiveis.add(ultima_linha);
-			        coordenadas_casas_possiveis.add(coluna - 1);
-			        coordenadas_diagonal.add(coordenadas_casas_possiveis);
-			}
-
 			
+			int linha_ataque = linha_atual + direcao;
 				
-			
-			
-			
+				
+			ataquePeao(g2d, linha_ataque, coluna_atual + 1, peca_selecionada.getCor(), coordenadas_diagonal);
+					 	
+		
+			ataquePeao(g2d, linha_ataque, coluna_atual - 1, peca_selecionada.getCor(), coordenadas_diagonal);
+	
 			vetor_de_coordenadas.add(coordenadas_vertical);
 			
 			if (!(coordenadas_diagonal.isEmpty())) {
@@ -308,6 +298,7 @@ public class DesenhaTabuleiro extends JPanel {
 		}
 	
 		else if (peca_selecionada.getPeca() == "torre") {
+
 			for (int i = 1; i < 8; i ++)
 			{
 				if (!pintaSeVazio(g2d, linha + i, coluna, peca_selecionada.getCor(), coordenadas_vertical)) {
@@ -316,8 +307,6 @@ public class DesenhaTabuleiro extends JPanel {
 				
 				
 			}
-			
-			
 			
 			for (int i = 1; i < 8; i ++)
 			{
@@ -588,7 +577,16 @@ public class DesenhaTabuleiro extends JPanel {
 			{
 
 				if (coordenada_escolhida.get(0) == linha_destino && coordenada_escolhida.get(1) == coluna_destino) {
-			
+					
+					/*
+					if (tabuleiro.matriz[linha_destino][coluna_destino].getPeca() == "rei") {
+						System.out.println("Foi condicao");
+						xeque();
+						return;
+					}
+					*/
+					
+					
 					escolhe_casa_destino = true;
 					pinta_quadrados_rosa = false;
 					repaint();
@@ -611,7 +609,9 @@ public class DesenhaTabuleiro extends JPanel {
 		*/
 		
 		if (tabuleiro.matriz[linha_destino][coluna_destino] != null && tabuleiro.matriz[linha_destino][coluna_destino].getCor() == turno) {
-	
+			coordenada_y = linha_destino;
+			coordenada_x = coluna_destino;
+			
 			jogadaReiniciada();
 			return;
 		}
@@ -634,6 +634,7 @@ public class DesenhaTabuleiro extends JPanel {
 		int coluna_destino = coordenada_x;
 		Graphics2D g2d = (Graphics2D) g;
 		
+		/*
 		if (torre_escolhida != null) {
 	
 			g2d.drawImage(peca_selecionada.getImage(), coluna_destino * tileWidth, linha_destino * tileHeight, tileWidth, tileHeight, null);
@@ -641,27 +642,20 @@ public class DesenhaTabuleiro extends JPanel {
 			tabuleiro.matriz[linha_destino][coluna_destino] = peca_selecionada;
 			tabuleiro.matriz[linha_antiga][coluna_antiga] = torre_escolhida;
 		}
+		*/
 		
-		else {
-			g2d.drawImage(peca_selecionada.getImage(), coluna_destino * tileWidth, linha_destino * tileHeight, tileWidth, tileHeight, null);
-			tabuleiro.matriz[linha_destino][coluna_destino] = peca_selecionada;
-			tabuleiro.matriz[linha_antiga][coluna_antiga] = null;
-		}
+
+		g2d.drawImage(peca_selecionada.getImage(), coluna_destino * tileWidth, linha_destino * tileHeight, tileWidth, tileHeight, null);
+		tabuleiro.matriz[linha_destino][coluna_destino] = peca_selecionada;
+		tabuleiro.matriz[linha_antiga][coluna_antiga] = null;
+		xeque(linha_destino, coluna_destino);
+		
 		
 		//Fim da jogada
 		
 		fimDaJogada();
 		
-		//Mudanca de turno
-		if (turno == "branco") {
-			turno = "preto";
-		}
 		
-		else {
-			turno = "branco";
-		}
-		
-
 	}
 	
 	private void fimDaJogada() {
@@ -673,19 +667,46 @@ public class DesenhaTabuleiro extends JPanel {
 		escolhe_casa_destino = false;
 		peca_selecionada = null;
 		torre_escolhida = null;
+
+		vetor_de_coordenadas.clear();
+		linha_antiga = -1;
+		coluna_antiga = -1;
+		linha = -1;
+		coluna = -1;
+		coordenada_y = -1;
+		coordenada_x = -1;
+		//torre_escolhida = null
+		
+		//Mudanca de turno
+		if (turno == "branco") {
+			turno = "preto";
+		}
+				
+		else {
+			turno = "branco";
+		}
 		
 		repaint();
 	}
 	
 	private void jogadaReiniciada() {
 		
-		notifica_click_em_peca = true;
+
+		peca_selecionada = tabuleiro.matriz[coordenada_y][coordenada_x];
 		pinta_quadrados_rosa = false;
 		jogada_iniciada = true;
+		
+		linha_antiga = linha;
+		coluna_antiga = coluna;
+		
+		vetor_de_coordenadas.clear();
+
+		
+		
 		repaint();
 	}
 	
-	private boolean ataquePeao(Graphics2D g2d, int linha, int coluna, String cor_atual) {
+	private boolean ataquePeao(Graphics2D g2d, int linha, int coluna, String cor_atual, ArrayList<ArrayList<Integer>> coordenada_movimento) {
 		
 		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
 
@@ -701,6 +722,12 @@ public class DesenhaTabuleiro extends JPanel {
 		    Rectangle2D casa = new Rectangle2D.Double(leftX, topY, tileWidth, tileHeight);
 		    g2d.setPaint(Color.pink);
 		    g2d.fill(casa);
+		    
+		    ArrayList<Integer> coordenadas_casas_possiveis = new ArrayList<>();
+	        coordenadas_casas_possiveis.add(linha);
+	        coordenadas_casas_possiveis.add(coluna);
+	        coordenada_movimento.add(coordenadas_casas_possiveis);
+		    
 		    return true;
 		}
 		
@@ -708,7 +735,7 @@ public class DesenhaTabuleiro extends JPanel {
 		
 	}
 	
-	private boolean movimentoPeao(Graphics2D g2d, int linha, int coluna, int cont) {
+	private boolean movimentoPeao(Graphics2D g2d, int linha, int coluna, ArrayList<ArrayList<Integer>> coordenada_movimento) {
 		
 		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
 
@@ -719,20 +746,17 @@ public class DesenhaTabuleiro extends JPanel {
 	
 		if (tabuleiro.matriz[linha][coluna] == null) {
 			
-			if (linha == 1 || linha == 6) {
-
-				double leftX = coluna * tileWidth;
-			    double topY = linha * tileHeight;
-			    Rectangle2D casa = new Rectangle2D.Double(leftX, topY, tileWidth, tileHeight);
-			    g2d.setPaint(Color.pink);
-			    g2d.fill(casa);
-			}
-			
 		    double leftX = coluna * tileWidth;
 		    double topY = linha * tileHeight;
 		    Rectangle2D casa = new Rectangle2D.Double(leftX, topY, tileWidth, tileHeight);
 		    g2d.setPaint(Color.pink);
 		    g2d.fill(casa);
+		    
+		    ArrayList<Integer> coordenadas_casas_possiveis = new ArrayList<>();
+			coordenadas_casas_possiveis.add(linha);
+			coordenadas_casas_possiveis.add(coluna);
+			coordenada_movimento.add(coordenadas_casas_possiveis);
+		    
 		    return true;  
 		}
 		
@@ -874,6 +898,297 @@ public class DesenhaTabuleiro extends JPanel {
 		repaint();
 		
 		return true;
+		
+	}
+	
+	private boolean confereXeque(int linha, int coluna) {
+		
+		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
+			return false;
+		}
+		
+		Pecas peca = tabuleiro.matriz[linha][coluna];
+		
+		if (peca != null) {
+			
+			if (peca.getPeca() == "rei" && !(peca.getCor() == turno)) {
+				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
+	private void xeque(int linha, int coluna) {
+		
+		if (peca_selecionada.getPeca() == "bispo") {
+			for (int i = 1; i < 8 ; i++)
+			{
+				int nova_linha = linha + i;
+				int nova_coluna = coluna + i;
+				
+				if(confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+						
+			}
+			
+			for (int i = 1; i < 8 ; i++)
+			{
+				
+				int nova_linha = linha + i;
+				int nova_coluna = coluna - i;
+				
+				if(confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+			
+			}
+			
+			for (int i = 1; i < 8 ; i++)
+			{
+				int nova_linha = linha - i;
+				int nova_coluna = coluna + i;
+				
+				if(confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			for (int i = 1; i < 8 ; i++)
+			{
+				
+				int nova_linha = linha - i;
+				int nova_coluna = coluna - i;
+				
+				if(confereXeque(nova_linha, nova_coluna)) {
+	
+					return;
+				}
+				
+			}
+		}
+		
+		else if (peca_selecionada.getPeca() == "rainha") {
+			for (int i = 1; i < 8; i ++)
+			{
+				int nova_linha = linha + i;
+				
+				if (confereXeque(nova_linha, coluna)){
+					return;
+				}
+			}
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha - i;
+				
+				if (confereXeque(nova_linha, coluna)) {
+					return;
+				}
+			
+			}
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				int nova_coluna = coluna + i;
+				
+				if (confereXeque(linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_coluna = coluna - i;
+				
+				if (confereXeque(linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha + i;
+				int nova_coluna = coluna + i;
+				
+				if (confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha - i;
+				int nova_coluna = coluna + i;
+				
+				if (confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha + i;
+				int nova_coluna = coluna - i;
+				
+				if (confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha - i;
+				int nova_coluna = coluna - i;
+				
+				if (confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+		}
+		
+		else if (peca_selecionada.getPeca() == "torre") {
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha + i;
+				
+				if (confereXeque(nova_linha, coluna)) {
+					return;
+				}
+				
+			}
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_linha = linha - i;
+				
+				if (confereXeque(nova_linha, coluna)) {
+					return;
+				}
+				
+			}
+			
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_coluna = coluna + i;
+				
+				if (confereXeque(linha, nova_coluna)) {
+					return;
+				}
+				
+			}
+			
+			
+			for (int i = 1; i < 8; i ++)
+			{
+				
+				int nova_coluna = coluna - i;
+				
+				if (confereXeque(linha, nova_coluna)) {
+					return;
+				}
+							
+			}
+			
+		}
+		
+		else if (peca_selecionada.getPeca() == "peao") {
+			
+			int direcao = (peca_selecionada.getCor() == "branco") ? -1 : 1;
+			
+			int nova_coluna_direita = coluna + direcao;
+			int nova_coluna_esquerda = coluna - direcao;
+			int nova_linha = linha + direcao;
+			
+			if (confereXeque(nova_linha, nova_coluna_direita)) {
+				return;
+			}
+			
+			if (confereXeque(nova_linha, nova_coluna_esquerda)) {
+				return;
+			}
+		}
+		
+		else if (peca_selecionada.getPeca() == "rei") {
+			
+			if (confereXeque(linha + 1, coluna)) {
+				return;
+			}
+			
+			if (confereXeque(linha - 1, coluna)) {
+				return;
+			}
+			
+			if (confereXeque(linha, coluna + 1)) {
+				return;
+			}
+			
+			if (confereXeque(linha, coluna - 1)) {
+				return;
+			}
+			
+			if (confereXeque(linha + 1, coluna + 1)) {
+				return;
+			}
+			
+			if (confereXeque(linha - 1, coluna + 1)) {
+				return;
+			}
+			
+			if (confereXeque(linha + 1, coluna - 1)) {
+				return;
+			}
+			
+			if (confereXeque(linha - 1, coluna - 1)) {
+				return;
+			}
+			
+		}
+		
+		
+		else if (peca_selecionada.getPeca() == "cavalo") {
+			
+			int[][] offsets = {
+	                {+2, +1}, {+2, -1}, {-2, +1}, {-2, -1},
+	                {+1, +2}, {+1, -2}, {-1, +2}, {-1, -2}
+	        };
+			
+			for (int[] offset : offsets)
+			{
+				int nova_linha = linha + offset[0];
+				int nova_coluna = coluna + offset[1];
+				if (confereXeque(nova_linha, nova_coluna)) {
+					return;
+				}
+			}
+		}
+		
+		
+		return;
 		
 	}
 	
