@@ -1,4 +1,6 @@
-package View;
+package Testes;
+import View.*;
+import Model.*;
 
 import static org.junit.Assert.*;
 import java.awt.event.*;
