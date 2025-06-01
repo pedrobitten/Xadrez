@@ -2,6 +2,7 @@ package Testes;
 import View.*;
 import Model.*;
 
+import javax.swing.*;
 import static org.junit.Assert.*;
 import org.junit.*;
 
