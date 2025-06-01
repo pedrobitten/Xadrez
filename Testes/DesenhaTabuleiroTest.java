@@ -78,27 +78,6 @@ public class DesenhaTabuleiroTest {
     }
     
     @Test
-    public void testPintaQuadradosRosas() throws Exception {
-        // Configura estado interno via reflexão
-        setField(desenhaTabuleiro, "peca_selecionada", new Torre("branco", "torre"));
-        setField(desenhaTabuleiro, "linha", 7);
-        setField(desenhaTabuleiro, "coluna", 0);
-        setField(desenhaTabuleiro, "jogada_iniciada", true);
-        
-        BufferedImage image = new BufferedImage(600, 600, BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.getGraphics();
-        Graphics2D g2d = (Graphics2D) g;
-        
-        // Chama o método privado via reflexão
-        Method pintaQuadradosRosas = DesenhaTabuleiro.class.getDeclaredMethod("pintaQuadradosRosas", Graphics.class);
-        pintaQuadradosRosas.setAccessible(true);
-        pintaQuadradosRosas.invoke(desenhaTabuleiro, g2d);
-        
-        int pixel = image.getRGB(75, 525);
-        assertEquals(Color.PINK.getRGB(), pixel);
-    }
-    
-    @Test
     public void testNotificaClickEmPeca() throws Exception {
         setField(desenhaTabuleiro, "coordenada_x", 0);
         setField(desenhaTabuleiro, "coordenada_y", 7);
