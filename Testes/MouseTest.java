@@ -33,8 +33,6 @@ public class MouseTest {
         
         mouse.mouseClicked(mockEvent);
         
-        // Verifica se o JOptionPane foi chamado (teste visual)
-        // Em um teste real, você mockaria o JOptionPane
     }
 
     @Test
