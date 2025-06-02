@@ -26,7 +26,7 @@ public class DesenhaTabuleiro extends JPanel {
 	private boolean torre2_ja_movimentou_jogador2 = false;
 	private boolean rei_ja_movimentou_jogador1 = false;
 	private boolean rei_ja_movimentou_jogador2 = false;
-	private Pecas torre_escolhida = null;
+	private boolean torre_escolhida = false;
 
 	private int coordenada_x = -1;
 	private int coordenada_y = -1;
@@ -159,25 +159,6 @@ public class DesenhaTabuleiro extends JPanel {
 		
 		Pecas pecaClicada = tabuleiro.matriz[linha][coluna];
 		
-		/*
-		if (peca_selecionada != null) {
-			if (pecaClicada != null && pecaClicada.getCor() == peca_selecionada.getCor()) {
-				jogadaReiniciada();
-				
-				jogada_iniciada = true;
-				notifica_click_em_peca = false;
-				peca_selecionada = pecaClicada;
-				linha_antiga = coordenada_y;
-				coluna_antiga = coordenada_x;
-				
-				repaint();
-				return ;
-				
-			}
-		}
-		*/
-		
-		
 		if (pecaClicada != null) {
 			
 			if (pecaClicada.getCor() == turno) {
@@ -194,7 +175,8 @@ public class DesenhaTabuleiro extends JPanel {
 	            }
 				
 				else if (pecaClicada.getPeca().equalsIgnoreCase("torre")) {
-	               
+					
+					
 					JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Torre clicado");
 					
 	            }
@@ -252,7 +234,7 @@ public class DesenhaTabuleiro extends JPanel {
 		coluna = coordenada_x;
 		
 		Graphics2D g2d = (Graphics2D) g;
-		ArrayList<Integer> coordenadas_casas_possiveis;
+
 		ArrayList<ArrayList<Integer>> coordenadas_vertical = new ArrayList<>();
 		ArrayList<ArrayList<Integer>> coordenadas_diagonal = new ArrayList<>();
 		ArrayList<ArrayList<Integer>> coordenadas_horizontal = new ArrayList<>();
@@ -578,15 +560,6 @@ public class DesenhaTabuleiro extends JPanel {
 
 				if (coordenada_escolhida.get(0) == linha_destino && coordenada_escolhida.get(1) == coluna_destino) {
 					
-					/*
-					if (tabuleiro.matriz[linha_destino][coluna_destino].getPeca() == "rei") {
-						System.out.println("Foi condicao");
-						xeque();
-						return;
-					}
-					*/
-					
-					
 					escolhe_casa_destino = true;
 					pinta_quadrados_rosa = false;
 					repaint();
@@ -594,19 +567,32 @@ public class DesenhaTabuleiro extends JPanel {
 				}
 			}
 			
+	
+			
 		}
-		
-		/*
-		if (peca_selecionada.getPeca() == "rei") {
+
+		if (tabuleiro.matriz[linha_destino][coluna_destino].getPeca() == "torre" && tabuleiro.matriz[linha_destino][coluna_destino].getCor() == turno) {
+			
 			if (roque_disponivel_jogador1 == true || roque_disponivel_jogador2 == true) {
+		
 				if (roque(linha_destino, coluna_destino) == false) {
+
+					coordenada_y = linha_destino;
+					coordenada_x = coluna_destino;
+					
 					jogadaReiniciada();
 					return;
 				}
+				
+				
+				else {
+					return ;
+				}
+				
 			}
 			
 		}
-		*/
+		
 		
 		if (tabuleiro.matriz[linha_destino][coluna_destino] != null && tabuleiro.matriz[linha_destino][coluna_destino].getCor() == turno) {
 			coordenada_y = linha_destino;
@@ -632,30 +618,52 @@ public class DesenhaTabuleiro extends JPanel {
 		
 		int linha_destino = coordenada_y;
 		int coluna_destino = coordenada_x;
-		Graphics2D g2d = (Graphics2D) g;
 		
-		/*
-		if (torre_escolhida != null) {
-	
-			g2d.drawImage(peca_selecionada.getImage(), coluna_destino * tileWidth, linha_destino * tileHeight, tileWidth, tileHeight, null);
-			g2d.drawImage(torre_escolhida.getImage(), coluna_antiga * tileWidth, linha_antiga * tileHeight, tileWidth, tileHeight, null);
-			tabuleiro.matriz[linha_destino][coluna_destino] = peca_selecionada;
-			tabuleiro.matriz[linha_antiga][coluna_antiga] = torre_escolhida;
+		System.out.print(coluna_destino);
+		System.out.print("\n");
+		System.out.print(coluna_antiga);
+		System.out.print("\n");
+		
+		if (peca_selecionada.getPeca() == "torre") {
+			//System.out.println("Foi condicao");
+			
+			if (turno == "branco") {
+				
+				if (descobreTorre(coluna_destino, "branco") == "torre1_jogador1") {
+					torre1_ja_movimentou_jogador1 = true;
+				}
+					
+				else {
+					torre2_ja_movimentou_jogador1 = true;
+				}
+			
+			
+			}
+			
+			else {
+			
+				if (descobreTorre(coluna_destino, "preto") == "torre1_jogador2") {
+					torre1_ja_movimentou_jogador2 = true;
+				}
+				
+				else {
+					System.out.println("Foi condicao");
+					torre2_ja_movimentou_jogador2 = true;
+				}	
+			}
 		}
-		*/
-		
-
-		g2d.drawImage(peca_selecionada.getImage(), coluna_destino * tileWidth, linha_destino * tileHeight, tileWidth, tileHeight, null);
+			
+			
 		tabuleiro.matriz[linha_destino][coluna_destino] = peca_selecionada;
 		tabuleiro.matriz[linha_antiga][coluna_antiga] = null;
+		
+		
 		xeque(linha_destino, coluna_destino);
 		
-		
-		//Fim da jogada
-		
+	
 		fimDaJogada();
 		
-		
+		return;
 	}
 	
 	private void fimDaJogada() {
@@ -666,7 +674,7 @@ public class DesenhaTabuleiro extends JPanel {
 		pinta_quadrados_rosa = false;
 		escolhe_casa_destino = false;
 		peca_selecionada = null;
-		torre_escolhida = null;
+		torre_escolhida = false;
 
 		vetor_de_coordenadas.clear();
 		linha_antiga = -1;
@@ -675,7 +683,7 @@ public class DesenhaTabuleiro extends JPanel {
 		coluna = -1;
 		coordenada_y = -1;
 		coordenada_x = -1;
-		//torre_escolhida = null
+
 		
 		//Mudanca de turno
 		if (turno == "branco") {
@@ -812,15 +820,49 @@ public class DesenhaTabuleiro extends JPanel {
 	    
 	}
 	
+	private String descobreTorre(int coluna_torre, String cor) {
+		
+		if (cor == "branco") {
+			
+			if (coluna_torre == 0) {
+
+				return "torre1_jogador1"; 
+			}
+			
+			else {
+
+				return "torre2_jogador1";
+			}
+		}
+		
+		else {
+			
+			if (coluna_torre == 0) {
+				return "torre1_jogador2";
+
+			}
+			
+			else {
+				return "torre2_jogador2";
+
+			}
+			
+		}
+		
+		
+		
+	}
+	
+
 	private boolean roque(int linha, int coluna) {
 		
-		if (tabuleiro.matriz[linha][coluna].getPeca() != "torre") {
-			return false;
-		}
 		
 		int inicio = Math.min(coluna, coluna_antiga) + 1;
         int fim = Math.max(coluna, coluna_antiga);
         
+        System.out.print(linha);
+        System.out.print("\n");
+        System.out.print(coluna);
         
         for (int cont = inicio; cont < fim; cont++)
         {
@@ -845,23 +887,34 @@ public class DesenhaTabuleiro extends JPanel {
 				return false;
 			}
 			
-			if (torre1_ja_movimentou_jogador1 == true) {
-				return false;
-			}
-			
-			if (torre2_ja_movimentou_jogador1 == true) {
-				return false;
-			}
-			
 			roque_disponivel_jogador1 = false;
 			
-			if (Math.abs(coluna) - Math.abs(coluna_antiga) == 3) {
+			if (descobreTorre(coluna, "branco") == "torre2_jogador1") {
+				
+				if (torre2_ja_movimentou_jogador1 == true) {
+					return false;
+				}
+				
 				torre2_ja_movimentou_jogador1 = true;
+				tabuleiro.matriz[linha_antiga][coluna_antiga - 1] = new Torre("branco", "torre");
+				tabuleiro.matriz[linha][coluna + 2] = peca_selecionada;
+				
 			}
 			
 			else {
+				
+				if (torre1_ja_movimentou_jogador1 == true) {
+					return false;
+				}
+				
 				torre1_ja_movimentou_jogador1 = true;
+				tabuleiro.matriz[linha_antiga][coluna_antiga + 1] = new Torre("branco", "torre");
+				tabuleiro.matriz[linha][coluna - 1] = peca_selecionada;
+				
 			}
+			
+			rei_ja_movimentou_jogador1 = false;
+			
 			
 		}
 		
@@ -871,31 +924,49 @@ public class DesenhaTabuleiro extends JPanel {
 				return false;
 			}
 			
-			if (torre1_ja_movimentou_jogador2 == true) {
-				return false;
-			}
-			
-			if (torre2_ja_movimentou_jogador2 == true) {
-				return false;
-			}
 			
 			roque_disponivel_jogador2 = false;
 			
-			if (Math.abs(coluna) - Math.abs(coluna_antiga) == 3) {
-				torre1_ja_movimentou_jogador2 = true;
+			if (descobreTorre(coluna, "preto") == "torre2_jogador2") {
+				
+				if (torre2_ja_movimentou_jogador2 == true) {
+					return false;
+				}
+				
+				torre2_ja_movimentou_jogador2 = true;
+				tabuleiro.matriz[linha_antiga][coluna_antiga - 1] = new Torre("preto", "torre");
+				tabuleiro.matriz[linha][coluna + 2] = peca_selecionada;
 			}
 			
 			else {
-				torre2_ja_movimentou_jogador2 = true;
+				
+				if (torre1_ja_movimentou_jogador2 == true) {
+					return false;
+				}
+				
+				torre1_ja_movimentou_jogador2 = true;
+				tabuleiro.matriz[linha_antiga][coluna_antiga + 1] = new Torre("preto", "torre");
+				tabuleiro.matriz[linha][coluna - 1] = peca_selecionada;
+				
 			}
+			
+			rei_ja_movimentou_jogador2 = false;
+			
 		}
 		
 		
-		escolhe_casa_destino = true;
-		pinta_quadrados_rosa = false;
-		torre_escolhida = tabuleiro.matriz[linha][coluna];
+		//escolhe_casa_destino = true;
+		//pinta_quadrados_rosa = false;
+		//torre_escolhida = true;
+
+		//linha_antiga = linha;
+		//coluna_antiga = coluna;
 		
-		repaint();
+		tabuleiro.matriz[linha_antiga][coluna_antiga] = null;
+		tabuleiro.matriz[linha][coluna] = null;
+		
+
+		fimDaJogada();
 		
 		return true;
 		
@@ -1197,4 +1268,3 @@ public class DesenhaTabuleiro extends JPanel {
 	
 		
 }
-
