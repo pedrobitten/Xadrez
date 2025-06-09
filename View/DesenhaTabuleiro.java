@@ -18,14 +18,6 @@ public class DesenhaTabuleiro extends JPanel {
 	private boolean pinta_quadrados_rosa = false;
 	private boolean escolhe_casa_destino = false;
 	private ArrayList<ArrayList<ArrayList<Integer>>> vetor_de_coordenadas = new ArrayList<>();
-	private boolean roque_disponivel_jogador1 = true;
-	private boolean roque_disponivel_jogador2 = true;
-	private boolean torre1_ja_movimentou_jogador1 = false;
-	private boolean torre1_ja_movimentou_jogador2 = false;
-	private boolean torre2_ja_movimentou_jogador1 = false;
-	private boolean torre2_ja_movimentou_jogador2 = false;
-	private boolean rei_ja_movimentou_jogador1 = false;
-	private boolean rei_ja_movimentou_jogador2 = false;
 	
 	private int coordenada_x = -1;
 	private int coordenada_y = -1;
@@ -566,11 +558,11 @@ public class DesenhaTabuleiro extends JPanel {
 			
 		}
 		
-		/*
-		if (tabuleiro.matriz[linha_destino][coluna_destino].getPeca() == "torre" && tabuleiro.matriz[linha_destino][coluna_destino].getCor() == Control.getController().getTurno()) {
+		
+		//Roque
+		if (Control.getController().getPeca(linha_destino, coluna_destino).getPeca() == "torre" && Control.getController().getPeca(linha_destino, coluna_destino).getCor() == Control.getController().getTurno()) {
 
-			if (roque(linha_destino, coluna_destino) == false) {
-
+			if (Control.getController().roque(linha_destino, coluna_destino, linha_antiga, coluna_antiga, peca_selecionada) == false) {
 				coordenada_y = linha_destino;
 				coordenada_x = coluna_destino;
 					
@@ -580,28 +572,29 @@ public class DesenhaTabuleiro extends JPanel {
 				
 				
 			else {
+				fimDaJogada();
 				return ;
 			}
 				
 			
 			
 		}
-		*/
 		
 		
+		//Escolher outra peca
 		if (Control.getController().getPeca(linha_destino, coluna_destino) != null && Control.getController().getPeca(linha_destino, coluna_destino).getCor() == Control.getController().getTurno()) {
 			coordenada_y = linha_destino;
 			coordenada_x = coluna_destino;
 			
 			jogadaReiniciada();
-			//repaint();
+
 			return;
 		}
 		
 		
-		
+		//Toca no tabuleiro
 		fimDaJogada();
-		
+		//return;
 
 	}
 	
@@ -617,47 +610,20 @@ public class DesenhaTabuleiro extends JPanel {
 		int coluna_destino = coordenada_x;
 		
 		if (peca_selecionada.getPeca() == "torre") {
-			//System.out.println("Foi condicao");
-			
-			if (Control.getController().getTurno() == "branco") {
-				
-				if (descobreTorre(coluna_destino, "branco") == "torre1_jogador1") {
-					torre1_ja_movimentou_jogador1 = true;
-				}
-					
-				else {
-					torre2_ja_movimentou_jogador1 = true;
-				}
-			
-			
-			}
-			
-			else {
-			
-				if (descobreTorre(coluna_destino, "preto") == "torre1_jogador2") {
-					torre1_ja_movimentou_jogador2 = true;
-				}
-				
-				else {
-
-					torre2_ja_movimentou_jogador2 = true;
-				}	
-			}
+			Control.getController().descobreTorre(coluna_destino, Control.getController().getTurno());
 		}
 		
 		else if (peca_selecionada.getPeca() == "peao") {
 			
 			if (linha_destino == 7 || linha_destino == 0) {
 				
-				Pecas substitui_peao = promocaoPeao();
+				Pecas substitui_peao = Control.getController().promocaoPeao();
 				
-				//System.out.print(substitui_peao);
+
 				
 				Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, substitui_peao);
 				Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
-				//tabuleiro.matriz[linha_destino][coluna_destino] = substitui_peao;
-				//tabuleiro.matriz[linha_antiga][coluna_antiga] = null;
-				//xeque(linha_destino, coluna_destino);
+
 				fimDaJogada();
 				return; 
 				
@@ -668,8 +634,10 @@ public class DesenhaTabuleiro extends JPanel {
 		Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, peca_selecionada);
 		Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
 		
-			
-		//xeque(linha_destino, coluna_destino);
+		
+		if (Control.getController().xeque(linha_destino, coluna_destino)) {
+			JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
+		}
 		
 	
 		fimDaJogada();
@@ -819,472 +787,7 @@ public class DesenhaTabuleiro extends JPanel {
 	    
 	}
 	
-	private String descobreTorre(int coluna_torre, String cor) {
-		
-		if (cor == "branco") {
-			
-			if (coluna_torre == 0) {
-
-				return "torre1_jogador1"; 
-			}
-			
-			else {
-
-				return "torre2_jogador1";
-			}
-		}
-		
-		else {
-			
-			if (coluna_torre == 0) {
-				return "torre1_jogador2";
-
-			}
-			
-			else {
-				return "torre2_jogador2";
-
-			}
-			
-		}
-		
-		
-		
-	}
 	
-	/*
-	private boolean roque(int linha, int coluna) {
-		
-		
-		int inicio = Math.min(coluna, coluna_antiga) + 1;
-        int fim = Math.max(coluna, coluna_antiga);
-        
-        
-        
-        for (int cont = inicio; cont < fim; cont++)
-        {
-            if (tabuleiro.matriz[linha_antiga][cont] != null) {
-                return false;
-            }
-        }
-		
-		if (peca_selecionada.getCor() == "branco") {
-			
-			if (roque_disponivel_jogador1 == false) {
-				return false;
-			}
-			
-			if (rei_ja_movimentou_jogador1 == true) {
-				return false;
-			}
-			
-
-			if (descobreTorre(coluna, "branco") == "torre2_jogador1") {
-				
-				if (torre2_ja_movimentou_jogador1 == true) {
-					return false;
-				}
-				
-				torre2_ja_movimentou_jogador1 = true;
-				tabuleiro.matriz[linha_antiga][coluna_antiga + 1] = new Torre("branco", "torre");
-				tabuleiro.matriz[linha][coluna - 1] = peca_selecionada;
-				
-			}
-			
-			else {
-				
-				if (torre1_ja_movimentou_jogador1 == true) {
-					return false;
-				}
-				
-				torre1_ja_movimentou_jogador1 = true;
-				tabuleiro.matriz[linha_antiga][coluna_antiga - 1] = new Torre("branco", "torre");
-				tabuleiro.matriz[linha][coluna + 2] = peca_selecionada;
-				
-			}
-			
-			rei_ja_movimentou_jogador1 = true;
-			roque_disponivel_jogador1 = false;
-			
-			
-		}
-		
-		else {
-			
-			if (roque_disponivel_jogador2 == false) {
-				return false;
-			}
-			
-			if (rei_ja_movimentou_jogador2 == true) {
-				return false;
-			}
-			
-			if (descobreTorre(coluna, "preto") == "torre2_jogador2") {
-				
-				if (torre2_ja_movimentou_jogador2 == true) {
-					return false;
-				}
-				
-				torre2_ja_movimentou_jogador2 = true;
-				tabuleiro.matriz[linha_antiga][coluna_antiga + 1] = new Torre("preto", "torre");
-				tabuleiro.matriz[linha][coluna - 1] = peca_selecionada;
-			}
-			
-			else {
-				
-				if (torre1_ja_movimentou_jogador2 == true) {
-					return false;
-				}
-				
-				torre1_ja_movimentou_jogador2 = true;
-				tabuleiro.matriz[linha_antiga][coluna_antiga - 1] = new Torre("preto", "torre");
-				tabuleiro.matriz[linha][coluna + 2] = peca_selecionada;
-				
-			}
-			
-			rei_ja_movimentou_jogador2 = true;
-			roque_disponivel_jogador2 = false;
-		}
-		
-		
-	
-		tabuleiro.matriz[linha_antiga][coluna_antiga] = null;
-		tabuleiro.matriz[linha][coluna] = null;
-		
-		fimDaJogada();
-	
-		return true;
-		
-	}
-	
-	
-	private boolean confereXeque(int linha, int coluna) {
-		
-		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
-			return false;
-		}
-		
-		Pecas peca = tabuleiro.matriz[linha][coluna];
-		
-		if (peca != null) {
-			
-			if (peca.getPeca() == "rei" && !(peca.getCor() == Control.getController().getTurno())) {
-				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
-				return true;
-			}
-			
-		}
-		
-		return false;
-	}
-	*/
-	
-	/*
-	private void xeque(int linha, int coluna) {
-		
-		if (peca_selecionada.getPeca() == "bispo") {
-			for (int i = 1; i < 8 ; i++)
-			{
-				int nova_linha = linha + i;
-				int nova_coluna = coluna + i;
-				
-				if(confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-						
-			}
-			
-			for (int i = 1; i < 8 ; i++)
-			{
-				
-				int nova_linha = linha + i;
-				int nova_coluna = coluna - i;
-				
-				if(confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-			
-			}
-			
-			for (int i = 1; i < 8 ; i++)
-			{
-				int nova_linha = linha - i;
-				int nova_coluna = coluna + i;
-				
-				if(confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			for (int i = 1; i < 8 ; i++)
-			{
-				
-				int nova_linha = linha - i;
-				int nova_coluna = coluna - i;
-				
-				if(confereXeque(nova_linha, nova_coluna)) {
-	
-					return;
-				}
-				
-			}
-		}
-		
-		else if (peca_selecionada.getPeca() == "rainha") {
-			for (int i = 1; i < 8; i ++)
-			{
-				int nova_linha = linha + i;
-				
-				if (confereXeque(nova_linha, coluna)){
-					return;
-				}
-			}
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha - i;
-				
-				if (confereXeque(nova_linha, coluna)) {
-					return;
-				}
-			
-			}
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				int nova_coluna = coluna + i;
-				
-				if (confereXeque(linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_coluna = coluna - i;
-				
-				if (confereXeque(linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha + i;
-				int nova_coluna = coluna + i;
-				
-				if (confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha - i;
-				int nova_coluna = coluna + i;
-				
-				if (confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha + i;
-				int nova_coluna = coluna - i;
-				
-				if (confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha - i;
-				int nova_coluna = coluna - i;
-				
-				if (confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-		}
-		
-		else if (peca_selecionada.getPeca() == "torre") {
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha + i;
-				
-				if (confereXeque(nova_linha, coluna)) {
-					return;
-				}
-				
-			}
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_linha = linha - i;
-				
-				if (confereXeque(nova_linha, coluna)) {
-					return;
-				}
-				
-			}
-			
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_coluna = coluna + i;
-				
-				if (confereXeque(linha, nova_coluna)) {
-					return;
-				}
-				
-			}
-			
-			
-			for (int i = 1; i < 8; i ++)
-			{
-				
-				int nova_coluna = coluna - i;
-				
-				if (confereXeque(linha, nova_coluna)) {
-					return;
-				}
-							
-			}
-			
-		}
-		
-		else if (peca_selecionada.getPeca() == "peao") {
-			
-			int direcao = (peca_selecionada.getCor() == "branco") ? -1 : 1;
-			
-			int nova_coluna_direita = coluna + direcao;
-			int nova_coluna_esquerda = coluna - direcao;
-			int nova_linha = linha + direcao;
-			
-			if (confereXeque(nova_linha, nova_coluna_direita)) {
-				return;
-			}
-			
-			if (confereXeque(nova_linha, nova_coluna_esquerda)) {
-				return;
-			}
-		}
-		
-		else if (peca_selecionada.getPeca() == "rei") {
-			
-			if (confereXeque(linha + 1, coluna)) {
-				return;
-			}
-			
-			if (confereXeque(linha - 1, coluna)) {
-				return;
-			}
-			
-			if (confereXeque(linha, coluna + 1)) {
-				return;
-			}
-			
-			if (confereXeque(linha, coluna - 1)) {
-				return;
-			}
-			
-			if (confereXeque(linha + 1, coluna + 1)) {
-				return;
-			}
-			
-			if (confereXeque(linha - 1, coluna + 1)) {
-				return;
-			}
-			
-			if (confereXeque(linha + 1, coluna - 1)) {
-				return;
-			}
-			
-			if (confereXeque(linha - 1, coluna - 1)) {
-				return;
-			}
-			
-		}
-		
-		
-		else if (peca_selecionada.getPeca() == "cavalo") {
-			
-			int[][] offsets = {
-	                {+2, +1}, {+2, -1}, {-2, +1}, {-2, -1},
-	                {+1, +2}, {+1, -2}, {-1, +2}, {-1, -2}
-	        };
-			
-			for (int[] offset : offsets)
-			{
-				int nova_linha = linha + offset[0];
-				int nova_coluna = coluna + offset[1];
-				if (confereXeque(nova_linha, nova_coluna)) {
-					return;
-				}
-			}
-		}
-		
-		
-		return;
-		
-	}
-	*/
-	
-	public Pecas promocaoPeao() {
-		
-	
-		DialogPromocaoPeao dialog = new DialogPromocaoPeao(Control.getController().getTurno(), null);
-		dialog.setVisible(true);
-		
-		String escolha = dialog.getEscolha();
-		Pecas novaPeca = null;
-		
-		if (escolha == "rainha") {
-			novaPeca = new Rainha(Control.getController().getTurno(), "rainha");
-		}
-		
-		else if (escolha == "torre") {
-			novaPeca = new Torre(Control.getController().getTurno(), "torre");
-		}
-		
-		else if (escolha == "bispo") {
-			novaPeca = new Bispo(Control.getController().getTurno(), "bispo");
-		}
-		
-		else if (escolha == "cavalo") {
-			novaPeca = new Cavalo(Control.getController().getTurno(), "cavalo");
-		}
-		
-		
-		return novaPeca;
-		
-		
-		
-	}
-	
-	 
 
 	
 		
