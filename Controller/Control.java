@@ -17,7 +17,6 @@ public class Control {
 	private static Control controller = null;
 	public Tabuleiro tabuleiro = new Tabuleiro();
 	private String turno;
-	//private boolean notifica_click_em_peca = true;
 	private JFrame janela_inicial;
 	private boolean roque_disponivel_jogador1;
 	private boolean roque_disponivel_jogador2;
@@ -27,10 +26,16 @@ public class Control {
 	private boolean torre2_ja_movimentou_jogador2;
 	private boolean rei_ja_movimentou_jogador1;
 	private boolean rei_ja_movimentou_jogador2;
+	public boolean rei_esta_em_xeque_jogador1;
+	public boolean rei_esta_em_xeque_jogador2;
+	public int pecas_atacando_rei_jogador1;
+	public int pecas_atacando_rei_jogador2;
+	private int[] posicao_rei_jogador1 = new int[2];
+	private int[] posicao_rei_jogador2 = new int[2];
 	
 	public Control() {
 		
-		turno = "preto";
+		turno = "branco";
 		roque_disponivel_jogador1 = true;
 		roque_disponivel_jogador2 = true;
 		torre1_ja_movimentou_jogador1 = false;
@@ -39,7 +44,14 @@ public class Control {
 		torre2_ja_movimentou_jogador2 = false;
 		rei_ja_movimentou_jogador1 = false;
 		rei_ja_movimentou_jogador2 = false;
-		
+		rei_esta_em_xeque_jogador1 = false;
+		rei_esta_em_xeque_jogador2 = false;
+		pecas_atacando_rei_jogador1 = 0;
+		pecas_atacando_rei_jogador2 = 0;
+		posicao_rei_jogador1[0] = 2; //
+		posicao_rei_jogador1[1] = 2; //	
+		posicao_rei_jogador2[0] = 4; //teste 
+		posicao_rei_jogador2[1] = 4; //
 	}
 	
 	//Singleton
@@ -94,8 +106,25 @@ public class Control {
 		
 	}
 	
+	public int[] getPosicaoReiJogador1() {
+		return posicao_rei_jogador1;
+	}
+	
+	public int[] getPosicaoReiJogador2() {
+		return posicao_rei_jogador2;
+	}
+	
+	public void setPosicaoReiJogador1(int linha, int coluna) {
+		posicao_rei_jogador1[0] = linha;
+		posicao_rei_jogador1[1] = coluna;
+	}
+	
+	public void setPosicaoReiJogador2(int linha, int coluna) {
+		posicao_rei_jogador2[0] = linha;
+		posicao_rei_jogador2[1] = coluna;
+	}
+	
 	public void mudancaDeTurno() {
-		
 		
 		//Mudanca de turno
 		if (turno == "branco") {
@@ -269,7 +298,7 @@ public class Control {
 			//return peca.getPeca() == "rei" && !(peca.getCor() == Control.getController().getTurno());
 			
 			if (peca.getPeca() == "rei" && !(peca.getCor() == Control.getController().getTurno())) {
-				System.out.print("Foi condicao");
+
 				
 				return true;
 			}
@@ -285,8 +314,56 @@ public class Control {
 		return false;
 	}
 	
+	//vai depender da peca
+	private boolean confereXeque2(int linha, int coluna) {
+		
+		if (linha < 0 || linha >= 8 || coluna < 0 || coluna >= 8) {
+			return false;
+		}
+		
+		//Pecas peca = tabuleiro.matriz[linha][coluna];
+		Pecas peca = this.getPeca(linha, coluna);
+		
+		
+		if (peca != null) {
+
+			//return peca.getPeca() == "rei" && !(peca.getCor() == Control.getController().getTurno());
+			
+			if (peca.getCor() == Control.getController().getTurno()) {
+				System.out.print("Foi condicao");
+				return true;
+			}
+			
+			
+			else {
+				return false; //qubra loop
+			}
+			
+			
+		}
+		
+		return false;
+	}
+	
+	/*
+	public void marcacaoXeque(String cor, Pecas peca) {
+		
+		if (cor == "branco") {
+			rei_esta_em_xeque_jogador2 = true;
+		}
+		
+		else {
+			rei_esta_em_xeque_jogador1 = true;
+		}
+		
+		System.out.print(peca);
+		peca.mudaEstadoXeque();
+		
+	}
+	*/
 	
 	
+	/*
 	public boolean xeque(int linha, int coluna) {
 		
 		if (this.getPeca(linha, coluna).getPeca() == "bispo") {
@@ -610,10 +687,16 @@ public class Control {
 			int nova_linha = linha + direcao;
 			
 			if (confereXeque(nova_linha, nova_coluna_direita)) {
+				//System.out.print(this.getPeca(linha, coluna));
+				//System.out.print("\n");
+				marcacaoXeque(Control.getController().getTurno(), this.getPeca(linha, coluna));
 				return true;
 			}
 			
 			if (confereXeque(nova_linha, nova_coluna_esquerda)) {
+				//System.out.print(this.getPeca(linha, coluna));
+				//System.out.print("\n");
+				marcacaoXeque(Control.getController().getTurno(), this.getPeca(linha, coluna));
 				return true;
 			}
 		}
@@ -675,6 +758,341 @@ public class Control {
 		
 		return false;
 		
+	}
+	*/
+	
+	public int xequeRei(int linha, int coluna) {
+		
+		int pecas_atacando_rei = 0;
+		
+		//boolean rei_esta_atacando = false;
+		//Torre, rainha
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_linha = linha + i;
+
+			if (!estaDentroDosLimites(nova_linha, coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(nova_linha, coluna)){
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(nova_linha, coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(nova_linha, coluna) == "torre" || getTipoPeca(nova_linha, coluna) == "rainha"){
+					
+					pecas_atacando_rei += 1;
+					break;
+					
+				}
+				
+			}
+			
+			if (Control.getController().getPeca(nova_linha, coluna) != null) {
+				break;
+			}
+		}
+		
+		
+		
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_linha = linha - i;
+			
+			if (!estaDentroDosLimites(nova_linha, coluna)) {
+				break;
+			}
+			
+			
+			if (confereXeque2(nova_linha, coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(nova_linha, coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(nova_linha, coluna) == "torre" || getTipoPeca(nova_linha, coluna) == "rainha"){
+
+					pecas_atacando_rei += 1;
+					break;
+					
+				}
+				
+				
+			}
+			
+			if (Control.getController().getPeca(nova_linha, coluna) != null) {
+				break;
+			}
+		
+		}
+		
+		for (int i = 1; i < 8; i ++)
+		{
+			int nova_coluna = coluna + i;
+			
+			if (!estaDentroDosLimites(linha, nova_coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(linha, nova_coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(linha, nova_coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(linha, nova_coluna) == "torre" || getTipoPeca(linha, nova_coluna) == "rainha"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+			}
+			
+			if (Control.getController().getPeca(linha, nova_coluna) != null) {
+				break;
+			}
+			
+		}
+		
+		
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_coluna = coluna - i;
+			
+			if (!estaDentroDosLimites(linha, nova_coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(linha, nova_coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(linha, nova_coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(linha, nova_coluna) == "torre" || getTipoPeca(linha, nova_coluna) == "rainha"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+			}
+			
+			if (Control.getController().getPeca(linha, nova_coluna) != null) {
+				break;
+			}
+		}
+		
+		//Bispo e rainha
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_linha = linha + i;
+			int nova_coluna = coluna + i;
+			
+			if (!estaDentroDosLimites(nova_linha, nova_coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(nova_linha, nova_coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "peao" && getTurno() == "branco") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(nova_linha, nova_coluna) == "bispo" || getTipoPeca(nova_linha, nova_coluna) == "rainha"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+				
+				
+			}
+			
+			if (Control.getController().getPeca(nova_linha, nova_coluna) != null) {
+				break;
+			}
+			
+		}
+		
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_linha = linha - i;
+			int nova_coluna = coluna + i;
+			
+			if (!estaDentroDosLimites(nova_linha, nova_coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(nova_linha, nova_coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "peao" && getTurno() == "preto") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(nova_linha, nova_coluna) == "bispo" || getTipoPeca(nova_linha, nova_coluna) == "rainha"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+			}
+			
+			if (Control.getController().getPeca(nova_linha, nova_coluna) != null) {
+				break;
+			}
+			
+		}
+		
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_linha = linha + i;
+			int nova_coluna = coluna - i;
+			
+			if (!estaDentroDosLimites(nova_linha, nova_coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(nova_linha, nova_coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "peao" && getTurno() == "branco") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(nova_linha, nova_coluna) == "bispo" || getTipoPeca(nova_linha, nova_coluna) == "rainha"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+			}
+			
+			if (Control.getController().getPeca(nova_linha, nova_coluna) != null) {
+				break;
+			}
+			
+		}
+		
+		
+		for (int i = 1; i < 8; i ++)
+		{
+			
+			int nova_linha = linha - i;
+			int nova_coluna = coluna - i;
+			
+			if (!estaDentroDosLimites(nova_linha, nova_coluna)) {
+				break;
+			}
+			
+			if (confereXeque2(nova_linha, nova_coluna)) {
+				
+				if (i == 1) {
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "peao" && getTurno() == "preto") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+					
+					if (getTipoPeca(nova_linha, nova_coluna) == "rei") {
+						pecas_atacando_rei += 1;
+						break;
+					}
+				}
+				
+				if (getTipoPeca(nova_linha, nova_coluna) == "bispo" || getTipoPeca(nova_linha, nova_coluna) == "rainha"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+			}
+			
+			if (Control.getController().getPeca(nova_linha, nova_coluna) != null) {
+				break;
+			}
+			
+		}
+		
+		int[][] offsets = {
+                {+2, +1}, {+2, -1}, {-2, +1}, {-2, -1},
+                {+1, +2}, {+1, -2}, {-1, +2}, {-1, -2}
+        };
+		
+		for (int[] offset : offsets)
+		{
+			int nova_linha = linha + offset[0];
+			int nova_coluna = coluna + offset[1];
+			if (confereXeque2(nova_linha, nova_coluna)) {
+				
+				if (getTipoPeca(nova_linha, nova_coluna) == "cavalo"){
+					pecas_atacando_rei += 1;
+					break;
+				}
+				
+			}
+		}
+		
+		/*
+		if (getTurno() == "branco") {
+			pecas_atacando_rei_jogador2 = pecas_atacando_rei;
+			return pecas_atac
+		}
+		
+		else {
+			pecas_atacando_rei_jogador1 = pecas_atacando_rei;
+		}
+		*/
+		
+		
+		
+		return pecas_atacando_rei;
+		
+	}
+	
+	public boolean getEstadoReiJogador1() {
+		return rei_esta_em_xeque_jogador1;
+	}
+	
+	public boolean getEstadoReiJogador2() {
+		return rei_esta_em_xeque_jogador2;
 	}
 	
 	public Pecas promocaoPeao() {
