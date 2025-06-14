@@ -9,6 +9,7 @@ public class Rei extends Pecas {
 
 	private String cor_jogador;
 	private String tipo_peca;
+
   
   public Rei(String cor, String tipo){
     cor_jogador = cor;
@@ -26,6 +27,8 @@ public class Rei extends Pecas {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    
+
   }
   
   public String getPeca(){
@@ -35,8 +38,9 @@ public class Rei extends Pecas {
   public String getCor() {
 	  return cor_jogador;
   }
-
   
+  
+  /*
   public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
@@ -67,6 +71,31 @@ public class Rei extends Pecas {
 	tabuleiro.matriz[linha_peca][coluna_peca] = null;
 	tabuleiro.matriz[linha_destino][coluna_destino] = this;
 	
+	
+  }
+  */
+  
+  public boolean movimentoValido(Tabuleiro tabuleiro, int linha_peca, int coluna_peca, int linha_destino, int coluna_destino)
+  {
+			
+	int diferenca_linha = linha_destino - linha_peca;
+	int diferenca_coluna = coluna_destino - coluna_peca;
+			
+	if (Math.abs(diferenca_linha) > 1 || Math.abs(diferenca_coluna) > 1) {
+		return false;
+	}
+
+	if (diferenca_linha == 0 && diferenca_coluna == 0) {
+		return false;
+	}
+	
+	Pecas alvo = tabuleiro.matriz[linha_destino][coluna_destino];
+	
+	if (alvo == null) {
+		return true;
+	}
+	
+	return !(alvo.getCor() == cor_jogador);
 	
   }
   
