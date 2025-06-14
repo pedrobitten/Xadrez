@@ -35,7 +35,7 @@ public class Control {
 	
 	public Control() {
 		
-		turno = "preto";
+		turno = "branco";
 		roque_disponivel_jogador1 = true;
 		roque_disponivel_jogador2 = true;
 		torre1_ja_movimentou_jogador1 = false;
@@ -44,13 +44,13 @@ public class Control {
 		torre2_ja_movimentou_jogador2 = false;
 		rei_ja_movimentou_jogador1 = false;
 		rei_ja_movimentou_jogador2 = false;
-		rei_esta_em_xeque_jogador1 = true;
+		rei_esta_em_xeque_jogador1 = false;
 		rei_esta_em_xeque_jogador2 = false;
 		pecas_atacando_rei_jogador1 = 0;
 		pecas_atacando_rei_jogador2 = 0;
-		posicao_rei_jogador1[0] = 0; //
-		posicao_rei_jogador1[1] = 7; //	
-		posicao_rei_jogador2[0] = 4; //teste 
+		posicao_rei_jogador1[0] = 7; //
+		posicao_rei_jogador1[1] = 4; //	
+		posicao_rei_jogador2[0] = 0; //teste 
 		posicao_rei_jogador2[1] = 4; //
 	}
 	
@@ -714,45 +714,112 @@ public class Control {
 		
 	}
 	
-	//Metodo esta errado
-	/*
-	public boolean xeque_Mate(int pecas_atacando, int linha, int coluna) {
+	private boolean existeLanceQueRemoveXeque(int linha, int coluna , String cor_rei) {
 		
-		//Pontas do tabuleiro
-		if ((coluna == 0 && linha == 0) || (coluna == 7 && linha == 0) || (coluna == 0 && linha == 7) || (coluna == 7 && linha == 7)) {
+
+		
+		for (int origem_linha = 0; origem_linha < 8; origem_linha ++)
+		{
+			for (int origem_coluna = 0; origem_coluna < 8; origem_coluna++)
+			{
+				
+				Pecas peca = getPeca(origem_linha, origem_coluna);
+				
+				if (peca == null || !(peca.getCor() == cor_rei)) {
+					continue;
+				}
+				
+				 for (int destino_linha = 0; destino_linha < 8; destino_linha++) {
+					 for (int destino_coluna = 0; destino_coluna < 8; destino_coluna++) {
+
+						 if (origem_linha == destino_linha && origem_coluna == destino_coluna) {
+							 continue;
+						 }
+
+						 // Usa o próprio validador da peça
+						 if (!peca.movimentoValido(tabuleiro, origem_linha, origem_coluna, destino_linha, destino_coluna)) continue;
+
+		                    /* -------- 3️⃣  SIMULA O LANCE ------------- */
+		                    Pecas capturada = getPeca(destino_linha, destino_coluna);
+		                    atualizaTabuleiro(origem_linha, origem_coluna, null);
+		                    atualizaTabuleiro(destino_linha, destino_coluna, peca);
+
+		                    // Se a peça era o rei, atualize posição temporária
+		                    int salva_rei_linha = linha; 
+		                    int salva_rei_coluna = coluna;
+		                    
+		                    if (peca.getPeca() == "rei") {
+		                        linha = destino_linha;
+		                        coluna = destino_coluna;
+		                    }
+
+		                    boolean ainda_em_xeque = xequeRei(linha, coluna, cor_rei) != 0;
+
+		                    /* -------- 4️⃣  DESFAZ LANCE -------------- */
+		                    atualizaTabuleiro(origem_linha, origem_coluna, peca);
+		                    atualizaTabuleiro(destino_linha, destino_coluna, capturada);
+		                    
+		                 
+		                    if (peca.getPeca() == "rei") {   // restaura posição do rei
+		                        linha = salva_rei_linha;
+		                        coluna = salva_rei_coluna;
+		                    }
+
+		                    /* 5️⃣ Se achou um lance que tira o xeque → já retorna */
+		                    if (!ainda_em_xeque) return true;
+		                }
+		            }
+				
+			}
+		}
+		
+		return false; //xeque-mate
+	}
+	
+	public boolean xequeMate(int linha, int coluna, String cor_rei) {
+		
+		int [][] direcoes = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+		Pecas rei = getPeca(linha, coluna);
+		
+		for (int[] direcao : direcoes)
+		{
+			int linha_nova = linha + direcao[0];
+			int coluna_nova = coluna + direcao[1];
 			
-			if (pecas_atacando == 3) {
-				return true;
+			if (!estaDentroDosLimites(linha_nova, coluna_nova)) {
+				continue;
 			}
 			
-		}
-		
-		//Rei na primeira ou na segunda linha
-		if (linha == 0 || linha == 7) {
+			Pecas destino = getPeca(linha_nova, coluna_nova);
 			
-			if (pecas_atacando == 5) {
-				return true;
+			if (destino != null && destino.getCor() == cor_rei) {
+				continue;
 			}
-		}
-		
-		//Rei na primeira ou na segunda coluna
-		if (coluna == 0 || coluna == 7) {
 			
-			if (pecas_atacando == 5) {
-				return true;
+			
+			atualizaTabuleiro(linha, coluna, null);
+			atualizaTabuleiro(linha_nova, coluna_nova, rei);
+			
+			boolean ainda_em_xeque = xequeRei(linha_nova, coluna_nova, cor_rei) != 0;
+			
+			atualizaTabuleiro(linha, coluna, rei);
+			atualizaTabuleiro(linha_nova, coluna_nova, destino);
+			
+			if (!ainda_em_xeque) { //rei achou fuga
+				return false;
 			}
+			
+			
 		}
 		
-		//Rei esta no meio do tabuleiro
-		if (pecas_atacando == 8) {
-			return true;
+		if (existeLanceQueRemoveXeque(linha, coluna, cor_rei)) {
+			return false;
 		}
 		
-		return false;
-		
+		return true;
 		
 	}
-	*/
+	
 	
 
 }
