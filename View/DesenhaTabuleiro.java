@@ -609,29 +609,18 @@ public class DesenhaTabuleiro extends JPanel {
 		int linha_destino = coordenada_y;
 		int coluna_destino = coordenada_x;
 		
-		if (Control.getController().getTurno() == "preto") {
-			if (Control.getController().getEstadoReiJogador2() == true && peca_selecionada.getPeca() != "rei") {
-				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rei em xeque!! Movimente o rei");
+		String turno_atual = Control.getController().getTurno();
+		boolean rei_em_xeque = (turno_atual == "preto") ? Control.getController().getEstadoReiJogador2() : Control.getController().getEstadoReiJogador1();
 
-				fimDaJogada(1);
-				return;
-			}
-		}
 		
-		if (Control.getController().getTurno() == "branco") {
-			
-			if (Control.getController().getEstadoReiJogador1() == true && peca_selecionada.getPeca() != "rei") {
-				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rei em xeque!! Movimente o rei");
-
-				fimDaJogada(1);
-				return;
-			}
+		if (rei_em_xeque && peca_selecionada.getPeca() != "rei") {
+			JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Rei em xeque!! Movimente o rei");
+			fimDaJogada(1);
+			return;
 		}
-		
-				
 		
 		if (peca_selecionada.getPeca() == "torre") {
-			Control.getController().descobreTorre(coluna_destino, Control.getController().getTurno());
+			Control.getController().descobreTorre(coluna_destino, turno_atual);
 		}
 		
 		else if (peca_selecionada.getPeca() == "peao") {
@@ -642,82 +631,83 @@ public class DesenhaTabuleiro extends JPanel {
 				Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, substitui_peao);
 				Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
 				fimDaJogada(0);
+				
 				return; 
 				
 			}
-			
 		}
 		
-		if (peca_selecionada.getPeca() == "rei") {
-			//Confere se eh possivel movimentar para aquela casa
-			//Se eh possivel, remove a marcacao de xeque
-			//Se nao, ha uma peca que esta em xeque ou pode atacar o rei
-			//Se nao tem nenhuma casa disponivel, eh xeque mate
-		
-			/*
-			if(Control.getController().xequeRei(linha_destino, coluna_destino) != 0) {
-				System.out.print("Foi condicao");
-				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Nao eh possivel movimentar para essa casa");
-				return;
-			}
-			*/
+		else if (peca_selecionada.getPeca() == "rei") {
 			
 			Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, peca_selecionada);
-			Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
-			
-			if (Control.getController().getTurno() == "branco") {
-				Control.getController().setPosicaoReiJogador1(linha_destino, coluna_destino);
-			}
-			
-			else {
-				Control.getController().setPosicaoReiJogador2(linha_destino, coluna_destino);
-			}
-			
-			
-			
-			//fimDaJogada(0);
-			//return;
+            Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
+
+            int novo_estado = Control.getController().xequeRei(linha_destino, coluna_destino, turno_atual);
+            
+            if (novo_estado == 0) {
+            	if (turno_atual == "branco") {
+            		
+            		Control.getController().ReiSaiuDoXequeJogador1();
+            		Control.getController().setPosicaoReiJogador1(linha_destino, coluna_destino);
+            	}
+            	
+            	else {
+            		Control.getController().ReiSaiuDoXequeJogador2();
+            		Control.getController().setPosicaoReiJogador2(linha_destino, coluna_destino);
+            	}
+            }
+            
+            else {
+            	
+            	JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Nao eh possivel movimentar para essa casa");
+            	Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, peca_selecionada);
+                Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, null);
+                
+                if (turno_atual == "branco") {
+                	Control.getController().setPosicaoReiJogador1(linha_antiga, coluna_antiga);
+                }
+                
+                else {
+                	Control.getController().setPosicaoReiJogador2(linha_antiga, coluna_antiga);
+                }
+                
+                fimDaJogada(1);
+                return;
+            }
+            
 		}
 		
-		else {
-			
-			Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, peca_selecionada);
-			Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
+		
+		Control.getController().atualizaTabuleiro(linha_destino, coluna_destino, peca_selecionada);
+		Control.getController().atualizaTabuleiro(linha_antiga, coluna_antiga, null);
+		
+		
+		int[] posicao_rei_inimigo = (turno_atual == "preto") 
+				? Control.getController().getPosicaoReiJogador1()
+				: Control.getController().getPosicaoReiJogador2();
+		
+		String cor_do_rei = (turno_atual == "preto") ? "branco" : "preto";
+		
+		int linha_rei = posicao_rei_inimigo[0];
+		int coluna_rei = posicao_rei_inimigo[1];
+		
+		if (Control.getController().xequeRei(linha_rei, coluna_rei, cor_do_rei) != 0) {
+			JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
 		}
+		
+		/*
+		else if (Control.getController().xequeRei(linha_rei, coluna_rei) == 8) {
 			
-		if (Control.getController().getTurno() == "preto") {
-				
-			int linha_rei = Control.getController().getPosicaoReiJogador1()[0];
-			int coluna_rei = Control.getController().getPosicaoReiJogador1()[1];
-				
-				
-			if (Control.getController().xequeRei(linha_rei, coluna_rei) != 0) {
-				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
-					
-			}
 		}
-			
-		else {
-				
-			int linha_rei = Control.getController().getPosicaoReiJogador2()[0];
-			int coluna_rei = Control.getController().getPosicaoReiJogador2()[1];
-				System.out.print(linha_rei);
-				System.out.print(coluna_rei);
-			if (Control.getController().xequeRei(linha_rei, coluna_rei) != 0) {
-				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
-					
-			}
-				
-		}
-			
-			
+		*/
+		
+		
 		fimDaJogada(0);
-		//repaint();
-			
+		
+		
 		return;
 		
-			
-		
+				
 	}
 	
 	private void fimDaJogada(int condicao) {
@@ -739,7 +729,7 @@ public class DesenhaTabuleiro extends JPanel {
 		coordenada_x = -1;
 
 		if (condicao != 1) {
-			//Control.getController().mudancaDeTurno();
+			Control.getController().mudancaDeTurno();
 		}
 		
 		
