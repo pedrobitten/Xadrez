@@ -1,12 +1,16 @@
 package Model;
 import java.io.File;
 import javax.imageio.ImageIO;
+
+import Controller.Control;
+
 import java.io.IOException;
 
 public class Bispo extends Pecas {
 
   private String cor_jogador;
   private String tipo_peca;
+
   
   public Bispo(String cor, String tipo){
     cor_jogador = cor;
@@ -21,6 +25,8 @@ public class Bispo extends Pecas {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    
+
   }
   
   public String getPeca(){
@@ -31,6 +37,8 @@ public class Bispo extends Pecas {
     return cor_jogador;
   }
   
+  
+  /*
   public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	  	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
@@ -75,6 +83,41 @@ public class Bispo extends Pecas {
 		
 		tabuleiro.matriz[linha_peca][coluna_peca] = null;
 		tabuleiro.matriz[linha_destino][coluna_destino] = this;
+	  
+  }
+  */
+  
+  public boolean movimentoValido(Tabuleiro tabuleiro, int linha_peca, int coluna_peca, int linha_destino, int coluna_destino)
+  {
+	  
+		int diferenca_linha = linha_destino - linha_peca;
+		int diferenca_coluna = coluna_destino - coluna_peca;
+		
+		if (Math.abs(diferenca_linha) != Math.abs(diferenca_coluna)) {
+			return false;
+		}
+		
+		//Direção da movimentação
+		int direcao_linha = Integer.signum(diferenca_linha);
+		int direcao_coluna = Integer.signum(diferenca_coluna);
+		
+		int linha = linha_peca + direcao_linha;
+		int coluna = coluna_peca + direcao_coluna;
+		
+		//Verificando se há peças no meio do caminho
+		while(linha != linha_destino && coluna != coluna_destino)
+		{
+			if (tabuleiro.matriz[linha][coluna] != null) {
+	            return false;
+			}
+			
+			linha += direcao_linha;
+			coluna += direcao_coluna;
+		}
+		
+		Pecas alvo = tabuleiro.matriz[linha_destino][coluna_destino];
+		
+		return (alvo == null) || (!(alvo.getCor() == cor_jogador));
 	  
   }
   
