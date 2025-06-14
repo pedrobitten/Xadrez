@@ -9,6 +9,7 @@ public class Torre extends Pecas {
 
 	private String cor_jogador;
 	private String tipo_peca;
+
   
   public Torre(String cor, String tipo){
     cor_jogador = cor;
@@ -26,6 +27,8 @@ public class Torre extends Pecas {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    
+
   }
   
   public String getPeca(){
@@ -35,10 +38,8 @@ public class Torre extends Pecas {
   public String getCor() {
 	  return cor_jogador;
   }
-
-  
-  
-  
+    
+  /*
   public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
@@ -87,6 +88,52 @@ public class Torre extends Pecas {
 	
 	tabuleiro.matriz[linha_peca][coluna_peca] = null;
 	tabuleiro.matriz[linha_destino][coluna_destino] = this;
+	
+  }
+  */
+  
+  public boolean movimentoValido(Tabuleiro tabuleiro, int linha_peca, int coluna_peca, int linha_destino, int coluna_destino)
+  {
+	
+	boolean linha_reta = (coluna_peca == coluna_destino || linha_peca == linha_destino);
+	
+	if (linha_peca == linha_destino && coluna_peca == coluna_destino) {
+		return false;
+	}
+	
+	if (!linha_reta) {
+        return false;
+	}
+	
+	if (linha_peca == linha_destino) {
+        int inicio = Math.min(coluna_peca, coluna_destino) + 1;
+        int fim = Math.max(coluna_peca, coluna_destino);
+        for (int cont = inicio; cont < fim; cont++)
+        {
+            if (tabuleiro.matriz[linha_peca][cont] != null) {
+                return false;
+            }
+        }
+    }
+	
+	else if (coluna_peca == coluna_destino) {
+        int inicio = Math.min(linha_peca, linha_destino) + 1;
+        int fim = Math.max(linha_peca, linha_destino);
+        for (int cont = inicio; cont < fim; cont++)
+        {
+            if (tabuleiro.matriz[cont][coluna_peca] != null) {
+                return false;
+            }
+        }
+    }
+		  
+	Pecas alvo = tabuleiro.matriz[linha_destino][coluna_destino];
+	
+	if (alvo == null) {
+		return true;
+	}
+	
+	return !(alvo.getCor() == cor_jogador);
 	
   }
   
