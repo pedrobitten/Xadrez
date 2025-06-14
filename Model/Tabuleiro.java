@@ -1,6 +1,5 @@
 package Model;
 
-
 public class Tabuleiro {
   public Pecas[][] matriz = new Pecas[8][8];
   private int cont1;
@@ -19,10 +18,14 @@ public class Tabuleiro {
     matriz[0][4] = new Rei("preto", "rei");
     
     //Posicionar peao do jogador2
-    for (cont2 = 0; cont2 < 8; cont2++)
+    
+
+	for (cont2 = 0; cont2 < 8; cont2++)
     {
       matriz[1][cont2] = new Peao("preto", "peao");
     }
+    
+    
     
     //Resto do Tabuleiro
     for (cont1 = 2; cont1 < 6; cont1++)
@@ -34,12 +37,15 @@ public class Tabuleiro {
     }
     
     //Posicionar peao do jogador1
+    
+
     for (cont2 = 0; cont2 < 8; cont2++)
     {
       matriz[6][cont2] = new Peao("branco", "peao");
     }
 
-
+ 
+   
     //Posicionar as pecas do jogador1
     matriz[7][0] = new Torre("branco", "torre");
     matriz[7][7] = new Torre("branco", "torre");
@@ -49,6 +55,30 @@ public class Tabuleiro {
     matriz[7][5] = new Bispo("branco", "bispo");
     matriz[7][3] = new Rainha("branco", "rainha");
     matriz[7][4] = new Rei("branco", "rei");
+    
+   
+    
+    //Testes
+    
+    matriz[0][7] = new Rei("preto", "rei");
+    //matriz[0][3] = new Torre("preto", "torre");
+    
+    matriz[0][6] = new Torre("branco", "torre");
+    matriz[2][5] = new Rei("branco", "rei");
+    
+    //matriz[5][3] = new Peao("preto", "peao");
+    
+    
+    //matriz[7][4] = new Peao("branco", "peao");
+    //matriz[6][4] = null;
+    
+    /*
+    for (int i = 1; i < 8; i++)
+    {
+    	matriz[7][i] = null;
+    }
+    */
+    
     
   }
   
@@ -71,48 +101,7 @@ public class Tabuleiro {
 	  return matriz[linha][coluna];
   }
   
-  public void movimento(Pecas peca, Tabuleiro tabuleiro, String coordenada, String coordenada_destino)
-  {
-	  
-	  if (peca instanceof Peao) {
-	
-		  Peao peao = (Peao)peca;
-		 
-
-		  peao.movimento(tabuleiro, coordenada, coordenada_destino);
-	  }
-	  
-	  else if (peca instanceof Torre) {
-		  Torre torre = (Torre)peca;
-		  
-		  torre.movimento(tabuleiro, coordenada, coordenada_destino);
-	  }
-	  
-	  else if (peca instanceof Bispo) {
-		  Bispo bispo = (Bispo)peca;
-		  
-		  bispo.movimento(tabuleiro, coordenada, coordenada_destino);
-	  }
-	  
-	  else if (peca instanceof Rainha) {
-		  Rainha rainha = (Rainha)peca;
-		  rainha.movimento(tabuleiro, coordenada, coordenada_destino);
-	  }
-	  
-	  else if (peca instanceof Rei) {
-		  Rei rei = (Rei) peca;
-		  rei.movimento(tabuleiro, coordenada, coordenada_destino);
-	  }
-	  
-	  else if (peca instanceof Cavalo) {
-		  Cavalo cavalo = (Cavalo) peca;
-		  
-		  cavalo.movimento(tabuleiro, coordenada, coordenada_destino);
-		  
-	  }
-			
-	  
-  }
+  
   
   public void ataque(Pecas peca, Tabuleiro tabuleiro, String coordenada, String coordenada_destino)
   {
