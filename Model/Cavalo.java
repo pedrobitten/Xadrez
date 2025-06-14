@@ -9,6 +9,7 @@ public class Cavalo extends Pecas {
 
 	private String cor_jogador;
 	private String tipo_peca;
+
   
   public Cavalo(String cor, String tipo ){
     cor_jogador = cor;
@@ -26,6 +27,8 @@ public class Cavalo extends Pecas {
     } catch (IOException e) {
         e.printStackTrace();
     }
+    
+
   }
   
 
@@ -36,8 +39,10 @@ public class Cavalo extends Pecas {
   public String getCor() {
 	  return cor_jogador;
   }
-
   
+ 
+
+  /*
   public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	  	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
@@ -70,6 +75,28 @@ public class Cavalo extends Pecas {
 		else {
 			System.out.println("Movimento invalido para o cavalo");
 		}
+	  
+  }
+  */
+  
+  public boolean movimentoValido(Tabuleiro tabuleiro, int linha_peca, int coluna_peca, int linha_destino, int coluna_destino)
+  {
+	  	
+		
+		int diferenca_linha = Math.abs(linha_destino - linha_peca);
+		int diferenca_coluna = Math.abs(coluna_destino - coluna_peca);
+		
+		if (!((diferenca_linha == 2 && diferenca_coluna == 1) || (diferenca_linha == 1 && diferenca_coluna == 2))){
+			return false;
+		}
+			
+		Pecas alvo = tabuleiro.matriz[linha_destino][coluna_destino];
+		
+		if (alvo == null) {
+			return true;
+		}
+		
+		return !(alvo.getCor() == cor_jogador);
 	  
   }
   
