@@ -7,6 +7,7 @@ public class Peao extends Pecas {
   private String cor_jogador;
   private String tipo_peca;
   public String posicao;
+
   
   public Peao(String cor, String tipo){
     cor_jogador = cor;
@@ -26,6 +27,8 @@ public class Peao extends Pecas {
         e.printStackTrace();
     }
     
+    
+    
   }
   
   
@@ -37,8 +40,7 @@ public class Peao extends Pecas {
 	  return cor_jogador;
   }
   
-  
-  //metodo de movimento do peao
+  /*
   public void movimento(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_destino)
   {
 	  	//Conversoes das coordenadas em inteiros
@@ -106,6 +108,49 @@ public class Peao extends Pecas {
 		
 				    
   }
+  */
+  
+  public boolean movimentoValido(Tabuleiro tabuleiro, int linha_peca, int coluna_peca, int linha_destino, int coluna_destino)
+  {
+	  
+	  if (linha_peca == linha_destino && linha_destino == coluna_destino) {
+		  return false;
+	  }
+	  	
+	  int diferenca_linha = linha_destino - linha_peca;
+	  int diferenca_coluna = coluna_destino - coluna_peca;
+	  int direcao = (cor_jogador == "branco") ? -1 : 1;
+		
+	  if (Integer.signum(diferenca_linha) != direcao) {
+		  return false;
+	  }
+	  
+	  Pecas alvo = tabuleiro.matriz[linha_destino][coluna_destino];
+	  
+	  if (Math.abs(diferenca_coluna) == 1 && diferenca_linha == direcao) {
+		  return alvo != null && !(alvo.getCor() == cor_jogador); 
+	  }
+	  
+	  if (diferenca_coluna != 0) {
+		  return false;
+	  }
+	  
+	  if (diferenca_linha == direcao) {
+		  return alvo == null;
+	  }
+	  
+	  if (linha_destino == 2 * direcao && posicao == "original") {
+		  int meio = linha_peca + direcao;
+		  
+		  return alvo == null && tabuleiro.matriz[meio][coluna_peca] == null;
+	  }
+	  
+	  return false;
+		
+		
+  }
+  
+  
   
   public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
   {
