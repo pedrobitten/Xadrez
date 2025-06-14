@@ -26,6 +26,7 @@ public class Rainha extends Pecas {
     } catch (IOException e) {
         e.printStackTrace();
     }
+
   }
   
   public String getPeca(){
@@ -35,9 +36,8 @@ public class Rainha extends Pecas {
   public String getCor() {
 	  return cor_jogador;
   }
-
-
-
+  
+  /*
   public void movimento(Tabuleiro tabuleiro, String coordenada_da_peca, String coordenada_do_destino)
   {
 	char colunaChar_peca = coordenada_da_peca.toLowerCase().charAt(0);
@@ -89,35 +89,83 @@ public class Rainha extends Pecas {
 		System.out.println("Movimento invalido para a Rainha!");
 	}
 	
-}
+  }
+  */
   
-	public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
-	{
-		char colunaChar_rainha = coordenada_peca.toLowerCase().charAt(0);
-		char linhaChar_rainha = coordenada_peca.charAt(1);
-		  
-		int coluna_rainha = colunaChar_rainha - 'a';
-		int linha_rainha = 8 - Character.getNumericValue(linhaChar_rainha);
-		  
-		char colunaChar_peca_inimiga = coordenada_peca_inimiga.toLowerCase().charAt(0);
-		char linhaChar_peca_inimiga = coordenada_peca_inimiga.charAt(1);
-		  
-		int coluna_peca_inimiga = colunaChar_peca_inimiga - 'a';
-		int linha_peca_inimiga = 8 - Character.getNumericValue(linhaChar_peca_inimiga);
-		  
-		int diferenca_linha = linha_peca_inimiga - linha_rainha;
-		int diferenca_coluna = coluna_peca_inimiga - coluna_rainha;
-				
+  public boolean movimentoValido(Tabuleiro tabuleiro, int linha_peca, int coluna_peca, int linha_destino, int coluna_destino)
+  {
 	
-		boolean movimento_diagonal = Math.abs(diferenca_linha) == Math.abs(diferenca_coluna);
-		boolean movimento_reto = diferenca_linha == 0 || diferenca_coluna == 0;
-				
-		if (movimento_diagonal || movimento_reto) {
+	int diferenca_linha = linha_destino - linha_peca;
+	int diferenca_coluna = coluna_destino - coluna_peca;
 			
-			//if (movimento_diagonal == true) {
+	boolean movimento_diagonal = Math.abs(diferenca_linha) == Math.abs(diferenca_coluna);
+	boolean movimento_reto = diferenca_linha == 0 || diferenca_coluna == 0;
+	
+	if (!movimento_diagonal && !movimento_reto) {
+		return false;
+	}
+	
+	if (diferenca_linha == 0 && diferenca_coluna == 0) {
+		return false;
+	}
+			
+
+	
+	int direcao_linha = Integer.signum(diferenca_linha);
+	int direcao_coluna = Integer.signum(diferenca_coluna);
+						
+	int linha = linha_peca + direcao_linha;
+	int coluna = coluna_peca + direcao_coluna;
+					
+	//Verificando se hÃ¡ peÃ§as no meio do caminho
+	while(linha != linha_destino ||  coluna != coluna_destino)
+	{
+		if (tabuleiro.matriz[linha][coluna] != null) {
+			return false;
+		}
+						
+		linha += direcao_linha;
+		coluna += direcao_coluna;
+	}
+		
+	
+	
+	Pecas alvo = tabuleiro.matriz[linha_destino][coluna_destino];
+	
+	if (alvo == null) {
+		return true;
+	}
+  
+  	return !(alvo.getCor() == cor_jogador);
+	
+  }
+  
+  public void ataque(Tabuleiro tabuleiro, String coordenada_peca, String coordenada_peca_inimiga)
+  {
+	  char colunaChar_rainha = coordenada_peca.toLowerCase().charAt(0);
+	  char linhaChar_rainha = coordenada_peca.charAt(1);
+		  
+	  int coluna_rainha = colunaChar_rainha - 'a';
+	  int linha_rainha = 8 - Character.getNumericValue(linhaChar_rainha);
+		  
+	  char colunaChar_peca_inimiga = coordenada_peca_inimiga.toLowerCase().charAt(0);
+	  char linhaChar_peca_inimiga = coordenada_peca_inimiga.charAt(1);
+		  
+	  int coluna_peca_inimiga = colunaChar_peca_inimiga - 'a';
+	  int linha_peca_inimiga = 8 - Character.getNumericValue(linhaChar_peca_inimiga);
+		  
+	  int diferenca_linha = linha_peca_inimiga - linha_rainha;
+	  int diferenca_coluna = coluna_peca_inimiga - coluna_rainha;
+				
+	  boolean movimento_diagonal = Math.abs(diferenca_linha) == Math.abs(diferenca_coluna);
+	  boolean movimento_reto = diferenca_linha == 0 || diferenca_coluna == 0;
+				
+	  if (movimento_diagonal || movimento_reto) {
+			
+		  //if (movimento_diagonal == true) {
 				//DireÃ§Ã£o da movimentaÃ§Ã£o
-				int direcao_linha = Integer.signum(diferenca_linha);
-				int direcao_coluna = Integer.signum(diferenca_coluna);
+		  int direcao_linha = Integer.signum(diferenca_linha);
+		  int direcao_coluna = Integer.signum(diferenca_coluna);
 						
 				int linha = linha_rainha + direcao_linha;
 				int coluna = coluna_rainha + direcao_coluna;
