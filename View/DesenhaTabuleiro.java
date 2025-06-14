@@ -692,14 +692,17 @@ public class DesenhaTabuleiro extends JPanel {
 		int coluna_rei = posicao_rei_inimigo[1];
 		
 		if (Control.getController().xequeRei(linha_rei, coluna_rei, cor_do_rei) != 0) {
-			JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
-		}
-		
-		/*
-		else if (Control.getController().xequeRei(linha_rei, coluna_rei) == 8) {
+			
+			if (Control.getController().xequeMate(linha_rei, coluna_rei, cor_do_rei)) {
+				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque mate!!");
+				return;
+			}
+			
+			else {
+				JOptionPane.showMessageDialog(DesenhaTabuleiro.this, "Xeque!!");
+			}
 			
 		}
-		*/
 		
 		
 		fimDaJogada(0);
