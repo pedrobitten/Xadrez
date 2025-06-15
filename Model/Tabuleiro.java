@@ -1,6 +1,11 @@
 package Model;
 
+import java.util.*;
+import Model.ObserverTabuleiro;
+
 public class Tabuleiro {
+    private final List<ObserverTabuleiro> observadores = new ArrayList<>();
+
   public Pecas[][] matriz = new Pecas[8][8];
   private int cont1;
   private int cont2;
@@ -174,4 +179,16 @@ public class Tabuleiro {
     }
     
   }
+}
+
+    public void adicionarObservador(ObserverTabuleiro o) {
+        observadores.add(o);
+    }
+
+    private void notificarObservadores() {
+        for (ObserverTabuleiro o : observadores) {
+            o.atualizar(this);
+        }
+    
+    notificarObservadores();
 }
