@@ -8,7 +8,9 @@ import Model.*;
 import java.util.ArrayList;
 import Controller.Control;
 
-public class DesenhaTabuleiro extends JPanel {
+import Model.ObserverTabuleiro;
+
+public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 
 	//private Tabuleiro tabuleiro = new Tabuleiro(); 
 
@@ -863,3 +865,9 @@ public class DesenhaTabuleiro extends JPanel {
 	
 		
 }
+
+
+    @Override
+    public void atualizar(Tabuleiro tabuleiro) {
+        repaint();
+    }
