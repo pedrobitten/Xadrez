@@ -20,20 +20,6 @@ public class XadrezFacade {
         janela.setVisible(true);
     }
 
-    public boolean moverPeca(int linhaOrigem, int colunaOrigem, int linhaDestino, int colunaDestino) {
-        Pecas peca = tabuleiro.matriz[linhaOrigem][colunaOrigem];
-        if (peca == null || !peca.movimentoValido(tabuleiro, linhaOrigem, colunaOrigem, linhaDestino, colunaDestino)) {
-            return false;
-        }
-
-        tabuleiro.matriz[linhaDestino][colunaDestino] = peca;
-        tabuleiro.matriz[linhaOrigem][colunaOrigem] = null;
-
-        view.repaint();
-
-        return true;
-    }
-
     public boolean isXeque(String corRei) {
         int[] posicaoRei = (corRei.equals("branco")) 
             ? control.getPosicaoReiJogador1() 
