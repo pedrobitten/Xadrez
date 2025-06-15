@@ -17,8 +17,8 @@ public class Frame extends JFrame {
 		setBounds(x,y,LARG_DEFAULT,ALT_DEFAULT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		
-		getContentPane().add(new DesenhaTabuleiro());
+		Tabuleiro tabuleiro = new Tabuleiro();
+		DesenhaTabuleiro view = new DesenhaTabuleiro(tabuleiro);
+		getContentPane().add(view);	
 	}
-	
 }
