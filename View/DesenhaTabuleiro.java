@@ -12,7 +12,7 @@ import Model.ObserverTabuleiro;
 
 public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 
-	//private Tabuleiro tabuleiro = new Tabuleiro(); 
+	private Tabuleiro tabuleiro = new Tabuleiro();
 
 	private Pecas peca_selecionada = null;
 	private boolean jogada_iniciada = false;
@@ -29,14 +29,13 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
     private int tileHeight;
     private int linha_antiga = -1;
     private int coluna_antiga = -1;
-    
 	
-	public DesenhaTabuleiro() {
+	public DesenhaTabuleiro(Tabuleiro tabuleiro) {
+    		this.tabuleiro = tabuleiro;
+    		tabuleiro.adicionarObservador(this);
 
-		
-		this.addMouseListener(new Mouse(this)
-		{
-			@Override
+    		this.addMouseListener(new Mouse(this) {
+        		@Override
 			public void mouseClicked(MouseEvent e) {
 				tileWidth = getWidth() / 8;
 	            tileHeight = getHeight() / 8;
