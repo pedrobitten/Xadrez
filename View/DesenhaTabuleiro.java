@@ -12,7 +12,7 @@ import Model.ObserverTabuleiro;
 
 public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 
-	private Tabuleiro tabuleiro = new Tabuleiro();
+	private Tabuleiro tabuleiro;
 
 	private Pecas peca_selecionada = null;
 	private boolean jogada_iniciada = false;
