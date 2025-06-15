@@ -35,4 +35,17 @@ public class XadrezFacade {
     public void atualizarView() {
         view.repaint();
     }
+    
+    public String obterTurnoAtual() {
+        return control.getTurno();
+    }
+    
+    public void promoverPeao() {
+        control.promocaoPeao();
+    }
+    
+    public void reiniciarJogo() {
+        control.tabuleiro = new Tabuleiro();
+        control = new Control();
+    }
 }
