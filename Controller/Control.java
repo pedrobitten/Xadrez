@@ -26,12 +26,13 @@ public class Control {
 	private boolean torre2_ja_movimentou_jogador2;
 	private boolean rei_ja_movimentou_jogador1;
 	private boolean rei_ja_movimentou_jogador2;
-	public boolean rei_esta_em_xeque_jogador1;
-	public boolean rei_esta_em_xeque_jogador2;
-	public int pecas_atacando_rei_jogador1;
-	public int pecas_atacando_rei_jogador2;
+	private boolean rei_esta_em_xeque_jogador1;
+	private boolean rei_esta_em_xeque_jogador2;
 	private int[] posicao_rei_jogador1 = new int[2];
 	private int[] posicao_rei_jogador2 = new int[2];
+	private int qtd_pecas_jogador1;
+	private int qtd_pecas_jogador2;
+	private int qtd_rodadas;
 	
 	public Control() {
 		
@@ -46,12 +47,14 @@ public class Control {
 		rei_ja_movimentou_jogador2 = false;
 		rei_esta_em_xeque_jogador1 = false;
 		rei_esta_em_xeque_jogador2 = false;
-		pecas_atacando_rei_jogador1 = 0;
-		pecas_atacando_rei_jogador2 = 0;
 		posicao_rei_jogador1[0] = 7; //
 		posicao_rei_jogador1[1] = 4; //	
 		posicao_rei_jogador2[0] = 0; //teste 
 		posicao_rei_jogador2[1] = 4; //
+		qtd_pecas_jogador1 = 16;
+		qtd_pecas_jogador2 = 16;
+		qtd_rodadas = 0;
+		
 	}
 	
 	//Singleton
@@ -684,6 +687,7 @@ public class Control {
 		}
 	}
 	
+	/*
 	public Pecas promocaoPeao() {
 		
 		
@@ -714,6 +718,8 @@ public class Control {
 		
 	}
 	
+	*/
+	
 	private boolean existeLanceQueRemoveXeque(int linha, int coluna , String cor_rei) {
 		
 
@@ -736,15 +742,15 @@ public class Control {
 							 continue;
 						 }
 
-						 // Usa o próprio validador da peça
+						 // Usa o prÃ³prio validador da peÃ§a
 						 if (!peca.movimentoValido(tabuleiro, origem_linha, origem_coluna, destino_linha, destino_coluna)) continue;
 
-		                    /* -------- 3️⃣  SIMULA O LANCE ------------- */
+		                    /* -------- 3ï¸�âƒ£  SIMULA O LANCE ------------- */
 		                    Pecas capturada = getPeca(destino_linha, destino_coluna);
 		                    atualizaTabuleiro(origem_linha, origem_coluna, null);
 		                    atualizaTabuleiro(destino_linha, destino_coluna, peca);
 
-		                    // Se a peça era o rei, atualize posição temporária
+		                    // Se a peÃ§a era o rei, atualize posiÃ§Ã£o temporÃ¡ria
 		                    int salva_rei_linha = linha; 
 		                    int salva_rei_coluna = coluna;
 		                    
@@ -755,17 +761,17 @@ public class Control {
 
 		                    boolean ainda_em_xeque = xequeRei(linha, coluna, cor_rei) != 0;
 
-		                    /* -------- 4️⃣  DESFAZ LANCE -------------- */
+		                    /* -------- 4ï¸�âƒ£  DESFAZ LANCE -------------- */
 		                    atualizaTabuleiro(origem_linha, origem_coluna, peca);
 		                    atualizaTabuleiro(destino_linha, destino_coluna, capturada);
 		                    
 		                 
-		                    if (peca.getPeca() == "rei") {   // restaura posição do rei
+		                    if (peca.getPeca() == "rei") {   // restaura posiÃ§Ã£o do rei
 		                        linha = salva_rei_linha;
 		                        coluna = salva_rei_coluna;
 		                    }
 
-		                    /* 5️⃣ Se achou um lance que tira o xeque → já retorna */
+		                    /* 5ï¸�âƒ£ Se achou um lance que tira o xeque â†’ jÃ¡ retorna */
 		                    if (!ainda_em_xeque) return true;
 		                }
 		            }
@@ -815,6 +821,37 @@ public class Control {
 		if (existeLanceQueRemoveXeque(linha, coluna, cor_rei)) {
 			return false;
 		}
+		
+		return true;
+		
+	}
+	
+	public void diminuiQtdPecasJogador1() {
+		
+		qtd_pecas_jogador1 -= 1;
+		
+	}
+	
+	public void diminuiQtdPecasJogador2() {
+		
+		qtd_pecas_jogador2 -= 1;
+		
+	}
+	
+	public void somaQtdRodadas() {
+		
+		qtd_rodadas += 1;
+		
+	}
+		
+	
+	public boolean Congelamento() {
+		
+		//if qtd_pecas_jogador1 < x && qtd_pecas_jogador2 < x
+		
+		//if qtd_rodadas > x
+		
+		//if qtd_partidas_faltam == 0
 		
 		return true;
 		
