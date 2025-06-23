@@ -1,5 +1,6 @@
 package Controller;
 import javax.swing.JOptionPane;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -10,7 +11,13 @@ import View.*;
 
 
 import View.DesenhaTabuleiro;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import Model.*;
 
 public class Control {
 	
@@ -26,13 +33,12 @@ public class Control {
 	private boolean torre2_ja_movimentou_jogador2;
 	private boolean rei_ja_movimentou_jogador1;
 	private boolean rei_ja_movimentou_jogador2;
-	private boolean rei_esta_em_xeque_jogador1;
-	private boolean rei_esta_em_xeque_jogador2;
+	public boolean rei_esta_em_xeque_jogador1;
+	public boolean rei_esta_em_xeque_jogador2;
+	public int pecas_atacando_rei_jogador1;
+	public int pecas_atacando_rei_jogador2;
 	private int[] posicao_rei_jogador1 = new int[2];
 	private int[] posicao_rei_jogador2 = new int[2];
-	private int qtd_pecas_jogador1;
-	private int qtd_pecas_jogador2;
-	private int qtd_rodadas;
 	
 	public Control() {
 		
@@ -47,14 +53,12 @@ public class Control {
 		rei_ja_movimentou_jogador2 = false;
 		rei_esta_em_xeque_jogador1 = false;
 		rei_esta_em_xeque_jogador2 = false;
+		pecas_atacando_rei_jogador1 = 0;
+		pecas_atacando_rei_jogador2 = 0;
 		posicao_rei_jogador1[0] = 7; //
 		posicao_rei_jogador1[1] = 4; //	
 		posicao_rei_jogador2[0] = 0; //teste 
 		posicao_rei_jogador2[1] = 4; //
-		qtd_pecas_jogador1 = 16;
-		qtd_pecas_jogador2 = 16;
-		qtd_rodadas = 0;
-		
 	}
 	
 	//Singleton
@@ -71,6 +75,14 @@ public class Control {
 	
 	public String getTurno() {
 		return turno;
+	}
+	
+	public void setTurno(String turno) {
+	    if (turno.equals("branco") || turno.equals("preto")) {
+	        this.turno = turno;
+	    } else {
+	        System.out.println("Cor de turno inválida: " + turno);
+	    }
 	}
 	
 
@@ -687,7 +699,6 @@ public class Control {
 		}
 	}
 	
-	/*
 	public Pecas promocaoPeao() {
 		
 		
@@ -718,8 +729,6 @@ public class Control {
 		
 	}
 	
-	*/
-	
 	private boolean existeLanceQueRemoveXeque(int linha, int coluna , String cor_rei) {
 		
 
@@ -742,15 +751,15 @@ public class Control {
 							 continue;
 						 }
 
-						 // Usa o prÃ³prio validador da peÃ§a
+						 // Usa o próprio validador da peça
 						 if (!peca.movimentoValido(tabuleiro, origem_linha, origem_coluna, destino_linha, destino_coluna)) continue;
 
-		                    /* -------- 3ï¸�âƒ£  SIMULA O LANCE ------------- */
+		                    /* -------- 3️⃣  SIMULA O LANCE ------------- */
 		                    Pecas capturada = getPeca(destino_linha, destino_coluna);
 		                    atualizaTabuleiro(origem_linha, origem_coluna, null);
 		                    atualizaTabuleiro(destino_linha, destino_coluna, peca);
 
-		                    // Se a peÃ§a era o rei, atualize posiÃ§Ã£o temporÃ¡ria
+		                    // Se a peça era o rei, atualize posição temporária
 		                    int salva_rei_linha = linha; 
 		                    int salva_rei_coluna = coluna;
 		                    
@@ -761,17 +770,17 @@ public class Control {
 
 		                    boolean ainda_em_xeque = xequeRei(linha, coluna, cor_rei) != 0;
 
-		                    /* -------- 4ï¸�âƒ£  DESFAZ LANCE -------------- */
+		                    /* -------- 4️⃣  DESFAZ LANCE -------------- */
 		                    atualizaTabuleiro(origem_linha, origem_coluna, peca);
 		                    atualizaTabuleiro(destino_linha, destino_coluna, capturada);
 		                    
 		                 
-		                    if (peca.getPeca() == "rei") {   // restaura posiÃ§Ã£o do rei
+		                    if (peca.getPeca() == "rei") {   // restaura posição do rei
 		                        linha = salva_rei_linha;
 		                        coluna = salva_rei_coluna;
 		                    }
 
-		                    /* 5ï¸�âƒ£ Se achou um lance que tira o xeque â†’ jÃ¡ retorna */
+		                    /* 5️⃣ Se achou um lance que tira o xeque → já retorna */
 		                    if (!ainda_em_xeque) return true;
 		                }
 		            }
@@ -826,35 +835,120 @@ public class Control {
 		
 	}
 	
-	public void diminuiQtdPecasJogador1() {
+	public void salvarJogo() {
+		JFileChooser fileChooser = new JFileChooser();
+		int escolha = fileChooser.showSaveDialog(fileChooser);
 		
-		qtd_pecas_jogador1 -= 1;
-		
+		if (escolha == JFileChooser.APPROVE_OPTION) {
+			File arquivo = fileChooser.getSelectedFile();
+			
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))){
+				
+				for (int linha = 0; linha < 8; linha++) {
+					
+					for (int coluna = 0; coluna < 8; coluna++) {
+						
+						Pecas peca = getPeca(linha, coluna);
+						
+						if (peca == null) {
+							writer.write(linha + "," + coluna + "," + "null");
+							writer.newLine();
+						}
+						
+						else {
+							writer.write(linha + "," + coluna + "," + peca.getCor() + "," + peca.getPeca());
+							writer.newLine();
+						}
+						
+					}
+				}
+				
+				writer.write("TURNO=" + getTurno());
+				writer.newLine();
+				
+				
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 	
-	public void diminuiQtdPecasJogador2() {
+	public void carregarJogo(JFrame frame) {
+		JFileChooser fileChooser = new JFileChooser();
 		
-		qtd_pecas_jogador2 -= 1;
+		int escolha = fileChooser.showOpenDialog(frame);
 		
-	}
-	
-	public void somaQtdRodadas() {
-		
-		qtd_rodadas += 1;
-		
-	}
-		
-	
-	public boolean Congelamento() {
-		
-		//if qtd_pecas_jogador1 < x && qtd_pecas_jogador2 < x
-		
-		//if qtd_rodadas > x
-		
-		//if qtd_partidas_faltam == 0
-		
-		return true;
-		
+		if (escolha == JFileChooser.APPROVE_OPTION) {
+			File arquivo = fileChooser.getSelectedFile();
+			
+			try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))){
+				
+				String linha_arquivo;
+				
+				while ((linha_arquivo = reader.readLine()) != null) {
+					if (linha_arquivo.startsWith("TURNO=")) {
+						setTurno(linha_arquivo.substring(6));
+						continue;
+					}
+					
+					String[] partes = linha_arquivo.split(",");
+					
+					if (partes.length < 3) {
+	                    System.err.println("Linha mal formatada: " + linha_arquivo);
+	                    continue;
+	                }
+					
+					int linha = Integer.parseInt(partes[0]);
+					int coluna = Integer.parseInt(partes[1]);
+					
+					
+					if (partes[2].equals("null")) {
+						atualizaTabuleiro(linha, coluna, null);
+						continue;
+					}
+					
+					
+					String cor = partes[2];
+					String tipo = partes[3];
+					
+					Pecas nova_peca = null;
+					
+					if (tipo.equals("peao")) {
+						
+						nova_peca = new Peao(cor, "peao");
+					}
+					
+					else if (tipo.equals("bispo")) {
+
+						nova_peca = new Bispo(cor, "bispo");
+					}
+					
+					else if (tipo.equals("cavalo")) {
+						nova_peca = new Cavalo(cor, "cavalo");
+					}
+					
+					else if (tipo.equals("rainha")) {
+						nova_peca = new Rainha(cor, "rainha");
+					}
+					
+					else if (tipo.equals("rei")) {
+						nova_peca = new Rei(cor, "rei");
+					}
+					
+					else if (tipo.equals("torre")){
+						nova_peca = new Torre(cor, "torre");
+					}
+					
+					
+					atualizaTabuleiro(linha, coluna, nova_peca);
+				}
+				
+				
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	
