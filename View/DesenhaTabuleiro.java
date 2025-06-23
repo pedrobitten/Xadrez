@@ -35,17 +35,27 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
     		tabuleiro.adicionarObservador(this);
 
     		this.addMouseListener(new Mouse(this) {
-        		@Override
-			public void mouseClicked(MouseEvent e) {
-				tileWidth = getWidth() / 8;
-	            tileHeight = getHeight() / 8;
-
-				coordenada_x = e.getX() / tileWidth; // coluna
-				coordenada_y = e.getY() / tileHeight; //linha
-				
-				//Control.get
-				notificaClickEmPeca(); 
-				escolheCasaDestino(vetor_de_coordenadas);
+        	
+    			@Override
+				public void mouseClicked(MouseEvent e) {
+    				
+    				if (SwingUtilities.isRightMouseButton(e)) {
+    					Control.getController().salvarJogo();
+    				}
+    				
+    				else {
+    					tileWidth = getWidth() / 8;
+    		            tileHeight = getHeight() / 8;
+    	
+    					coordenada_x = e.getX() / tileWidth; // coluna
+    					coordenada_y = e.getY() / tileHeight; //linha
+    					
+    					//Control.get
+    					notificaClickEmPeca(); 
+    					escolheCasaDestino(vetor_de_coordenadas);
+    				}
+    				
+    				
 			}
 			
 		});
@@ -860,13 +870,9 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 	}
 	
 	
-
-	
-		
-}
-
-
     @Override
     public void atualizar(Tabuleiro tabuleiro) {
         repaint();
     }
+    
+}
