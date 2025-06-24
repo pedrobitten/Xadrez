@@ -550,6 +550,8 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 		
 		int linha_destino = coordenada_y;
 		int coluna_destino = coordenada_x;
+		boolean destino_valido = false;
+		
 		
 		for (ArrayList<ArrayList<Integer>> coordenadas : vetor_coordenadas)
 		{
@@ -558,10 +560,12 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 
 				if (coordenada_escolhida.get(0) == linha_destino && coordenada_escolhida.get(1) == coluna_destino) {
 					
-					escolhe_casa_destino = true;
-					pinta_quadrados_rosa = false;
-					repaint();
-					return;
+					destino_valido = true;
+					break;
+				}
+				
+				if (destino_valido) {
+					break;
 				}
 			}
 			
@@ -569,9 +573,16 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 			
 		}
 		
+		if (destino_valido) {
+			escolhe_casa_destino = true;
+			pinta_quadrados_rosa = false;
+			repaint();
+			return;
+		}
 		
+		Pecas peca_escolhida = Control.getController().getPeca(linha_destino, coluna_destino);
 		//Roque
-		if (Control.getController().getPeca(linha_destino, coluna_destino).getPeca() == "torre" && Control.getController().getPeca(linha_destino, coluna_destino).getCor() == Control.getController().getTurno()) {
+		if (peca_escolhida != null && peca_escolhida.getPeca() == "torre" && peca_escolhida.getCor() == Control.getController().getTurno()) {
 
 			if (Control.getController().roque(linha_destino, coluna_destino, linha_antiga, coluna_antiga, peca_selecionada) == false) {
 				coordenada_y = linha_destino;
@@ -593,7 +604,7 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 		
 		
 		//Escolher outra peca
-		if (Control.getController().getPeca(linha_destino, coluna_destino) != null && Control.getController().getPeca(linha_destino, coluna_destino).getCor() == Control.getController().getTurno()) {
+		if (peca_escolhida != null && peca_escolhida.getCor() == Control.getController().getTurno()) {
 			coordenada_y = linha_destino;
 			coordenada_x = coluna_destino;
 			
@@ -604,8 +615,8 @@ public class DesenhaTabuleiro extends JPanel implements ObserverTabuleiro {
 		
 		
 		//Toca no tabuleiro
-		fimDaJogada(0);
-		//return;
+		fimDaJogada(1);
+		
 
 	}
 	
