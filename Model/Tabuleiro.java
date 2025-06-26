@@ -4,7 +4,7 @@ import java.util.*;
 import Model.ObserverTabuleiro;
 
 public class Tabuleiro {
-    private final List<ObserverTabuleiro> observadores = new ArrayList<>();
+  private final List<ObserverTabuleiro> observadores = new ArrayList<>();
 
   public Pecas[][] matriz = new Pecas[8][8];
   private int cont1;
@@ -12,78 +12,13 @@ public class Tabuleiro {
   
   public Tabuleiro(){
     
-    //Posicionar as pecas do jogador2 
-    matriz[0][0] = new Torre("preto", "torre");
-    matriz[0][7] = new Torre("preto", "torre");
-    matriz[0][1] = new Cavalo("preto", "cavalo");
-    matriz[0][6] = new Cavalo("preto", "cavalo");
-    matriz[0][2] = new Bispo("preto", "bispo");
-    matriz[0][5] = new Bispo("preto", "bispo");
-    matriz[0][3] = new Rainha("preto", "rainha");
-    matriz[0][4] = new Rei("preto", "rei");
     
-    //Posicionar peao do jogador2
-    
-
-	for (cont2 = 0; cont2 < 8; cont2++)
-    {
-      matriz[1][cont2] = new Peao("preto", "peao");
-    }
-    
-    
-    
-    //Resto do Tabuleiro
-    for (cont1 = 2; cont1 < 6; cont1++)
-    {
-      for (cont2 = 0; cont2 < 8; cont2++)
-      {
-        matriz[cont1][cont2] = null;
-      } 
-    }
-    
-    //Posicionar peao do jogador1
-    
-
-    for (cont2 = 0; cont2 < 8; cont2++)
-    {
-      matriz[6][cont2] = new Peao("branco", "peao");
-    }
-
- 
-   
-    //Posicionar as pecas do jogador1
-    matriz[7][0] = new Torre("branco", "torre");
-    matriz[7][7] = new Torre("branco", "torre");
-    matriz[7][1] = new Cavalo("branco", "cavalo");
-    matriz[7][6] = new Cavalo("branco", "cavalo");
-    matriz[7][2] = new Bispo("branco", "bispo");
-    matriz[7][5] = new Bispo("branco", "bispo");
-    matriz[7][3] = new Rainha("branco", "rainha");
-    matriz[7][4] = new Rei("branco", "rei");
-    
-   
-    
-    //Testes
-    
-    matriz[0][7] = new Rei("preto", "rei");
-    //matriz[0][3] = new Torre("preto", "torre");
-    
-    matriz[0][6] = new Torre("branco", "torre");
-    matriz[2][5] = new Rei("branco", "rei");
-    
-    //matriz[5][3] = new Peao("preto", "peao");
-    
-    
-    //matriz[7][4] = new Peao("branco", "peao");
-    //matriz[6][4] = null;
-    
-    /*
-    for (int i = 1; i < 8; i++)
-    {
-    	matriz[7][i] = null;
-    }
-    */
-    
+    inicializaTabuleiroNormal();
+    //ataquePeaoCavalo();
+    //roqueLongoCurto();
+	//xequeDireto();
+	//xequeDescoberto();
+	//xequeMate();
     
   }
   
@@ -179,16 +114,182 @@ public class Tabuleiro {
     }
     
   }
-}
+  
+  public void inicializaTabuleiroNormal() {
+	
+	  //Posicionar as pecas do jogador2 
+	  matriz[0][0] = new Torre("preto", "torre");
+	  matriz[0][7] = new Torre("preto", "torre");
+	  matriz[0][1] = new Cavalo("preto", "cavalo");
+	  matriz[0][6] = new Cavalo("preto", "cavalo");
+	  matriz[0][2] = new Bispo("preto", "bispo");
+	  matriz[0][5] = new Bispo("preto", "bispo");
+	  matriz[0][3] = new Rainha("preto", "rainha");
+	  matriz[0][4] = new Rei("preto", "rei");
+	    
+	  //Posicionar peao do jogador2
+	    
+	  for (cont2 = 0; cont2 < 8; cont2++)
+	  {
+		  matriz[1][cont2] = new Peao("preto", "peao");
+	  }
+	      
+	  //Resto do Tabuleiro
+	  for (cont1 = 2; cont1 < 6; cont1++)
+	  {
+		  for (cont2 = 0; cont2 < 8; cont2++)
+		  {
+			  matriz[cont1][cont2] = null;
+		  } 
+	  }
+	    
+	  //Posicionar peao do jogador1
+	    
 
-    public void adicionarObservador(ObserverTabuleiro o) {
-        observadores.add(o);
-    }
+	  for (cont2 = 0; cont2 < 8; cont2++)
+	  {
+		  matriz[6][cont2] = new Peao("branco", "peao");
+	  }
+ 
+	  //Posicionar as pecas do jogador1
+	  matriz[7][0] = new Torre("branco", "torre");
+	  matriz[7][7] = new Torre("branco", "torre");
+	  matriz[7][1] = new Cavalo("branco", "cavalo");
+	  matriz[7][6] = new Cavalo("branco", "cavalo");
+	  matriz[7][2] = new Bispo("branco", "bispo");
+	  matriz[7][5] = new Bispo("branco", "bispo");
+	  matriz[7][3] = new Rainha("branco", "rainha");
+	  matriz[7][4] = new Rei("branco", "rei");
+  }
+  
+  public void ataquePeaoCavalo() {
+	
+	  //Posicionar as pecas do jogador2 
+	  matriz[0][0] = new Torre("preto", "torre");
+	  matriz[0][7] = new Torre("preto", "torre");
+	  matriz[0][1] = new Cavalo("preto", "cavalo");
+	  matriz[0][6] = new Cavalo("preto", "cavalo");
+	  matriz[0][2] = new Bispo("preto", "bispo");
+	  matriz[0][5] = new Bispo("preto", "bispo");
+	  matriz[0][3] = new Rainha("preto", "rainha");
+	  matriz[0][4] = new Rei("preto", "rei");
+	    
+	  //Posicionar peao do jogador2
+	    
+	  for (cont2 = 0; cont2 < 8; cont2++)
+	  {
+		  matriz[1][cont2] = new Peao("preto", "peao");
+	  }
+	      
+	  //Resto do Tabuleiro
+	  for (cont1 = 2; cont1 < 6; cont1++)
+	  {
+		  for (cont2 = 0; cont2 < 8; cont2++)
+		  {
+			  matriz[cont1][cont2] = null;
+		  } 
+	  }
+	    
+	  //Posicionar peao do jogador1
+	    
 
-    private void notificarObservadores() {
-        for (ObserverTabuleiro o : observadores) {
-            o.atualizar(this);
-        }
+	  for (cont2 = 0; cont2 < 8; cont2++)
+	  {
+		  matriz[6][cont2] = new Peao("branco", "peao");
+	  }
+ 
+	  //Posicionar as pecas do jogador1
+	  matriz[7][0] = new Torre("branco", "torre");
+	  matriz[7][7] = new Torre("branco", "torre");
+	  matriz[7][1] = new Cavalo("branco", "cavalo");
+	  matriz[7][6] = new Cavalo("branco", "cavalo");
+	  matriz[7][2] = new Bispo("branco", "bispo");
+	  matriz[7][5] = new Bispo("branco", "bispo");
+	  matriz[7][3] = new Rainha("branco", "rainha");
+	  matriz[7][4] = new Rei("branco", "rei");
+  
+	  matriz[5][4] = new Peao("preto", "peao");
+	  matriz[3][3] = new Cavalo("preto", "cavalo");
+	  
+  }
+  
+  public void roqueLongoCurto() {
+	  
+	  //Posicionar as pecas do jogador2 
+	  matriz[0][0] = new Torre("preto", "torre");
+	  matriz[0][7] = new Torre("preto", "torre");
+
+	  matriz[0][4] = new Rei("preto", "rei");
+	    
+	  //Posicionar peao do jogador2
+	    
+	  for (cont2 = 0; cont2 < 8; cont2++)
+	  {
+		  matriz[1][cont2] = new Peao("preto", "peao");
+	  }
+	      
+	  //Resto do Tabuleiro
+	  for (cont1 = 2; cont1 < 6; cont1++)
+	  {
+		  for (cont2 = 0; cont2 < 8; cont2++)
+		  {
+			  matriz[cont1][cont2] = null;
+		  } 
+	  }
+	    
+	  //Posicionar peao do jogador1
+	    
+
+	  for (cont2 = 0; cont2 < 8; cont2++)
+	  {
+		  matriz[6][cont2] = new Peao("branco", "peao");
+	  }
+ 
+	  //Posicionar as pecas do jogador1
+	  matriz[7][0] = new Torre("branco", "torre");
+	  matriz[7][7] = new Torre("branco", "torre");
+
+	  matriz[7][4] = new Rei("branco", "rei");
+  
+  }
+  
+  public void xequeDireto() {
+	  
+	  matriz[6][0] = new Rei("preto", "rei");
+	  matriz[0][7] = new Torre("branco", "torre");
+	  
+  }
+  
+  public void xequeDescoberto() {
+	  
+	  matriz[0][7] = new Bispo("branco", "bispo");
+	  matriz[1][6] = new Torre("branco", "torre"); //problema com peao
+	  
+	  matriz[7][0] = new Rei("preto", "rei");
+  }
+  
+  public void xequeMate() {
+	  
+	  matriz[0][7] = new Torre("branco", "torre");
+	  matriz[1][2] = new Rainha("branco", "rainha");
+	  
+	  matriz[7][7] = new Rei("preto", "rei");
+	  
+  }
+  
+  
+
+  public void adicionarObservador(ObserverTabuleiro o) {
+	  observadores.add(o);
+  }
+
+  private void notificarObservadores() {
+	  
+	  for (ObserverTabuleiro o : observadores) {
+		  o.atualizar(this);
+	  }
     
-    notificarObservadores();
+	  notificarObservadores();
+  }
+    
 }
