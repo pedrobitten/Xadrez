@@ -12,13 +12,14 @@ public class Tabuleiro {
   
   public Tabuleiro(){
     
-    
     inicializaTabuleiroNormal();
     //ataquePeaoCavalo();
     //roqueLongoCurto();
 	//xequeDireto();
 	//xequeDescoberto();
 	//xequeMate();
+    //promocaoDoPeao();
+	//congelamento();
     
   }
   
@@ -274,6 +275,21 @@ public class Tabuleiro {
 	  matriz[1][2] = new Rainha("branco", "rainha");
 	  
 	  matriz[7][7] = new Rei("preto", "rei");
+	  
+  }
+  
+  public void promocaoDoPeao() {
+	  
+	  matriz[1][0] = new Peao("branco", "peao");
+  }
+  
+  public void congelamento() {
+	  
+	  
+	  matriz[5][5] = new Rei("branco", "rei");
+	  matriz[1][0] = new Bispo("preto", "bispo");
+	  matriz[6][3] = new Rainha("preto", "rainha");
+	  
 	  
   }
   
