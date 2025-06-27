@@ -59,6 +59,11 @@ public class Control {
 		posicao_rei_jogador1[1] = 4; //	
 		posicao_rei_jogador2[0] = 0; //teste 
 		posicao_rei_jogador2[1] = 4; //
+		
+		JanelaInicial jogo= new JanelaInicial("Xadrez");
+    	
+    	jogo.setVisible(true);
+		
 	}
 	
 	//Singleton
@@ -951,6 +956,8 @@ public class Control {
 		}
 	}
 	
+	public static void main(String[] args) {
+		Control controllerControl = Control.getController();
+	}
 	
-
 }
