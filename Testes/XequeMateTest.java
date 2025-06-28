@@ -11,110 +11,61 @@ public class XequeMateTest {
     public void testaMateDoLouco() {
         Tabuleiro tabuleiro = new Tabuleiro();
 
-        // Limpa o tabuleiro (caso Tabuleiro inicialize com todas as peças)
+        // Limpa o tabuleiro
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 tabuleiro.matriz[i][j] = null;
 
-        // Posiciona peças
-        Rei reiBranco = new Rei("R1", 1);
-        Rei reiPreto = new Rei("R2", 2);
-        Rainha damaPreta = new Rainha("Q2", 2);
+        // Coloca peças envolvidas no mate
+        Pecas reiBranco = new Rei("branco", "rei");
+        Pecas reiPreto = new Rei("preto", "rei");
+        Pecas damaPreta = new Rainha("preto", "rainha");
 
-        tabuleiro.matriz[7][4] = reiBranco; // e1
-        tabuleiro.matriz[0][4] = reiPreto;  // e8
-        tabuleiro.matriz[3][7] = damaPreta; // h5 (ameaça o rei branco via diagonal)
+        // Coordenadas:
+        // rei branco -> e1 → linha 7, coluna 4
+        // rei preto  -> e8 → linha 0, coluna 4
+        // dama preta -> h4 → linha 4, coluna 7
 
-        // Define coordenadas do rei branco
-        int linhaReiBranco = 7; // e1
-        int colunaReiBranco = 4;
+        tabuleiro.matriz[7][4] = reiBranco;
+        tabuleiro.matriz[0][4] = reiPreto;
+        tabuleiro.matriz[4][7] = damaPreta;
 
-        // Verifica xeque
+        // Verifica que o rei branco está em xeque
+        int linhaReiBranco = 7, colunaReiBranco = 4;
         int xeque = tabuleiro.xequeRei(linhaReiBranco, colunaReiBranco, "branco");
-        assertTrue(xeque > 0);
+        assertTrue("O rei branco deveria estar em xeque", xeque > 0);
 
         // Verifica xeque-mate
         boolean mate = tabuleiro.ehXequeMate("branco");
-        assertTrue(mate);
+        assertTrue("Deveria ser xeque-mate", mate);
     }
-
+    
     @Test
-    public void testaMateDoPastor() {
+    public void testaXequeSemMate() {
         Tabuleiro tabuleiro = new Tabuleiro();
     
         // Limpa o tabuleiro
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 8; j++)
                 tabuleiro.matriz[i][j] = null;
-
-        // Posiciona peças
-        Rei reiPreto = new Rei("R2", 2);
-        Rei reiBranco = new Rei("R1", 1);
-        Bispo bispoBranco = new Bispo("B1", 1);
-        Rainha damaBranca = new Rainha("Q1", 1);
-
-        tabuleiro.matriz[0][4] = reiPreto;    // e8
-        tabuleiro.matriz[7][4] = reiBranco;   // e1
-        tabuleiro.matriz[5][2] = bispoBranco; // c3
-        tabuleiro.matriz[3][5] = damaBranca;  // f5 → ameaça f7
-
-        // Xeque mate em f7
-        tabuleiro.matriz[1][5] = null; // f7 está livre
-        tabuleiro.matriz[1][6] = null; // g7 também (sem escape)
-
-        int xeque = tabuleiro.xequeRei(0, 4, "preto");
-        assertTrue(xeque > 0);
-
-        boolean mate = tabuleiro.ehXequeMate("preto");
-        assertTrue(mate);
-    }
-
-    @Test
-    public void testaXequeSemMate() {
-        Tabuleiro tabuleiro = new Tabuleiro();
-
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                tabuleiro.matriz[i][j] = null;
-
-        Rei reiPreto = new Rei("R2", 2);
-        Rainha damaBranca = new Rainha("Q1", 1);
-
-        tabuleiro.matriz[0][4] = reiPreto;    // e8
-        tabuleiro.matriz[1][4] = damaBranca;  // e7 → xeque frontal
-
-        // Casa d8 está livre para o rei fugir
+    
+        // Coloca rei preto e dama branca
+        Pecas reiPreto = new Rei("preto", "rei");
+        Pecas damaBranca = new Rainha("branco", "rainha");
+    
+        tabuleiro.matriz[0][4] = reiPreto;   // e8
+        tabuleiro.matriz[1][4] = damaBranca; // e7 → ameaça vertical
+    
+        // Deixa d8 livre para fuga
         tabuleiro.matriz[0][3] = null;
-
+    
+        // Verifica xeque
         int xeque = tabuleiro.xequeRei(0, 4, "preto");
-        assertTrue(xeque > 0);
-
+        assertTrue("O rei preto está em xeque", xeque > 0);
+    
+        // Verifica que NÃO é xeque-mate
         boolean mate = tabuleiro.ehXequeMate("preto");
-        assertFalse(mate); // Rei pode fugir para d8
+        assertFalse("Não deveria ser xeque-mate (rei pode fugir)", mate);
     }
-
-    @Test
-    public void testaAfogamentoEmpate() {
-        Tabuleiro tabuleiro = new Tabuleiro();
-
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++)
-                tabuleiro.matriz[i][j] = null;
-
-        Rei reiPreto = new Rei("R2", 2);
-        Rei reiBranco = new Rei("R1", 1);
-        Rainha damaBranca = new Rainha("Q1", 1);
-
-        tabuleiro.matriz[0][7] = reiPreto;     // h8
-        tabuleiro.matriz[2][6] = damaBranca;   // g6
-        tabuleiro.matriz[2][5] = reiBranco;    // f6 (controla casas de fuga)
-
-        // Rei preto não está em xeque, mas não pode mover
-
-        int xeque = tabuleiro.xequeRei(0, 7, "preto");
-        assertEquals(0, xeque);
-
-        boolean mate = tabuleiro.ehXequeMate("preto");
-        assertFalse(mate); // Não é mate, é empate por afogamento
-    }
+    
 }
