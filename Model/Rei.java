@@ -132,33 +132,5 @@ public class Rei extends Pecas {
 		tabuleiro.matriz[linha_rei][coluna_rei] = null;
 		
 	}
-
-	@Override
-	public java.util.List<String> movimentosPossiveis(Tabuleiro tabuleiro, String posicaoAtual) {
-	    java.util.List<String> movimentos = new java.util.ArrayList<>();
-	
-	    char col = posicaoAtual.toLowerCase().charAt(0);
-	    char lin = posicaoAtual.charAt(1);
-	
-	    int x = 8 - Character.getNumericValue(lin);
-	    int y = col - 'a';
-	
-	    int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-	    int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
-	
-	    for (int i = 0; i < 8; i++) {
-	        int nx = x + dx[i];
-	        int ny = y + dy[i];
-	
-	        if (nx >= 0 && nx < 8 && ny >= 0 && ny < 8) {
-	            Pecas destino = tabuleiro.matriz[nx][ny];
-	            if (destino == null || !destino.getCor().equals(this.cor_jogador)) {
-	                movimentos.add("" + (char)('a' + ny) + (8 - nx));
-	            }
-	        }
-	    }
-	
-	    return movimentos;
-	}
 	
 }
