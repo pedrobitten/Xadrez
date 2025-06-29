@@ -304,8 +304,6 @@ public class Tabuleiro {
 	  for (ObserverTabuleiro o : observadores) {
 		  o.atualizar(this);
 	  }
-    
-	  notificarObservadores();
   }
     
 }
