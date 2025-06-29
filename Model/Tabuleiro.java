@@ -309,3 +309,30 @@ public class Tabuleiro {
   }
     
 }
+
+public boolean ehCongelamento(String corJogador) {
+    // 1. Verifica se o jogador está em xeque
+    int[] posRei = getPosicaoRei(corJogador);
+    if (xequeRei(posRei[0], posRei[1], corJogador) > 0) return false;
+
+    // 2. Percorre todas as peças do jogador atual
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Pecas peca = matriz[i][j];
+            if (peca != null && corJogador.equals(peca.getCor())) {
+                // Tenta todos os movimentos possíveis para essa peça
+                List<String> destinos = peca.movimentosPossiveis(this, i, j);
+                for (String destino : destinos) {
+                    int destLinha = ...; // converter destino para coordenadas (linha)
+                    int destCol = ...; // converter destino para coordenadas (coluna)
+                    // Simula o movimento: se for legal (não coloca o rei em xeque), não é congelamento
+                    if (movimentoEhLegal(peca, i, j, destLinha, destCol, corJogador)) {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    // Nenhum movimento legal e não está em xeque => congelamento
+    return true;
+}
